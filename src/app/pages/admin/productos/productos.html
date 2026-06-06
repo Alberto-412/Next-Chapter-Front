@@ -1,0 +1,131 @@
+<div class="productos-container">
+    <h1>Gestión de Productos</h1>
+
+    @if (mensaje) {
+    <p class="mensaje-ok">{{ mensaje }}</p>
+    }
+    @if (error) {
+    <p class="mensaje-error">{{ error }}</p>
+    }
+
+    <!-- LISTADO -->
+    @if (!productoSeleccionado && !modoCreacion) {
+    <div>
+        <button (click)="mostrarFormularioCreacion()">+ Nuevo producto</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th>Editorial</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (producto of productos; track producto.id) {
+                <tr>
+                    <td>{{ producto.id }}</td>
+                    <td>{{ producto.titulo }}</td>
+                    <td>{{ producto.precio }} €</td>
+                    <td>{{ producto.stock }}</td>
+                    <td>{{ producto.editorial }}</td>
+                    <td>
+                        <button (click)="verProducto(producto.id)">Ver</button>
+                        <button (click)="editarProducto(producto.id)">Editar</button>
+                        <button (click)="eliminarProducto(producto.id)">Eliminar</button>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    }
+
+    <!-- DETALLE -->
+    @if (productoSeleccionado && !modoEdicion) {
+    <div>
+        <h2>Detalle del producto</h2>
+        <p><strong>ID:</strong> {{ productoSeleccionado.id }}</p>
+        <p><strong>Título:</strong> {{ productoSeleccionado.titulo }}</p>
+        <p><strong>Descripción:</strong> {{ productoSeleccionado.descripcion }}</p>
+        <p><strong>ISBN:</strong> {{ productoSeleccionado.isbn }}</p>
+        <p><strong>Precio:</strong> {{ productoSeleccionado.precio }} €</p>
+        <p><strong>Stock:</strong> {{ productoSeleccionado.stock }}</p>
+        <p><strong>Pre-reserva:</strong> {{ productoSeleccionado.pre_reserva ? 'Sí' : 'No' }}</p>
+        <p><strong>Editorial:</strong> {{ productoSeleccionado.editorial }}</p>
+        <p><strong>Autores:</strong> {{ productoSeleccionado.autores }}</p>
+        <p><strong>Categorías:</strong> {{ productoSeleccionado.categorias }}</p>
+        <p><strong>Fecha publicación:</strong> {{ productoSeleccionado.fecha_publicacion }}</p>
+        @if (productoSeleccionado.imagen) {
+        <img [src]="productoSeleccionado.imagen" alt="portada" width="150" />
+        }
+        <br>
+        <button (click)="editarProducto(productoSeleccionado.id)">Editar</button>
+        <button (click)="eliminarProducto(productoSeleccionado.id)">Eliminar</button>
+        <button (click)="cerrar()">Volver</button>
+    </div>
+    }
+
+    <!-- EDICIÓN -->
+    @if (productoSeleccionado && modoEdicion) {
+    <div>
+        <h2>Editar producto</h2>
+        <label>Título</label>
+        <input [(ngModel)]="productoSeleccionado.titulo" />
+        <label>Descripción</label>
+        <textarea [(ngModel)]="productoSeleccionado.descripcion"></textarea>
+        <label>ISBN</label>
+        <input [(ngModel)]="productoSeleccionado.isbn" />
+        <label>Precio</label>
+        <input type="number" [(ngModel)]="productoSeleccionado.precio" />
+        <label>Stock</label>
+        <input type="number" [(ngModel)]="productoSeleccionado.stock" />
+        <label>Pre-reserva</label>
+        <select [(ngModel)]="productoSeleccionado.pre_reserva">
+            <option [value]="0">No</option>
+            <option [value]="1">Sí</option>
+        </select>
+        <label>Imagen (URL)</label>
+        <input [(ngModel)]="productoSeleccionado.imagen" />
+        <label>Fecha publicación</label>
+        <input type="date" [(ngModel)]="productoSeleccionado.fecha_publicacion" />
+        <label>ID Editorial</label>
+        <input type="number" [(ngModel)]="productoSeleccionado.id_editorial" />
+        <button (click)="guardarProducto()">Guardar</button>
+        <button (click)="cerrar()">Cancelar</button>
+    </div>
+    }
+
+    <!-- CREACIÓN -->
+    @if (modoCreacion) {
+    <div>
+        <h2>Nuevo producto</h2>
+        <label>Título</label>
+        <input [(ngModel)]="nuevoProducto.titulo" />
+        <label>Descripción</label>
+        <textarea [(ngModel)]="nuevoProducto.descripcion"></textarea>
+        <label>ISBN</label>
+        <input [(ngModel)]="nuevoProducto.isbn" />
+        <label>Precio</label>
+        <input type="number" [(ngModel)]="nuevoProducto.precio" />
+        <label>Stock</label>
+        <input type="number" [(ngModel)]="nuevoProducto.stock" />
+        <label>Pre-reserva</label>
+        <select [(ngModel)]="nuevoProducto.pre_reserva">
+            <option [value]="0">No</option>
+            <option [value]="1">Sí</option>
+        </select>
+        <label>Imagen (URL)</label>
+        <input [(ngModel)]="nuevoProducto.imagen" />
+        <label>Fecha publicación</label>
+        <input type="date" [(ngModel)]="nuevoProducto.fecha_publicacion" />
+        <label>ID Editorial</label>
+        <input type="number" [(ngModel)]="nuevoProducto.id_editorial" />
+        <button (click)="crearProducto()">Crear</button>
+        <button (click)="cerrar()">Cancelar</button>
+    </div>
+    }
+
+</div>

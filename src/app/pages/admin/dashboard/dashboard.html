@@ -1,0 +1,72 @@
+<div class="dashboard-container">
+    <h1>Dashboard</h1>
+
+    @if (error) {
+    <p class="mensaje-error">{{ error }}</p>
+    }
+
+    <!-- USUARIOS PENDIENTES -->
+    <section>
+        <h2>Usuarios pendientes de validación ({{ usuariosPendientes.length }})</h2>
+        @if (usuariosPendientes.length === 0) {
+        <p>No hay usuarios pendientes</p>
+        }
+        @if (usuariosPendientes.length > 0) {
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Fecha registro</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (usuario of usuariosPendientes; track usuario.id) {
+                <tr>
+                    <td>{{ usuario.id }}</td>
+                    <td>{{ usuario.nombre }}</td>
+                    <td>{{ usuario.mail }}</td>
+                    <td>{{ usuario.fecha_registro }}</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+        }
+    </section>
+
+    <!-- ÚLTIMOS PEDIDOS -->
+    <section>
+        <h2>Últimos pedidos</h2>
+        @if (pedidos.length === 0) {
+        <p>No hay pedidos</p>
+        }
+        @if (pedidos.length > 0) {
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Cliente</th>
+                    <th>Email</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (pedido of pedidos; track pedido.id) {
+                <tr>
+                    <td>{{ pedido.id }}</td>
+                    <td>{{ pedido.cliente }}</td>
+                    <td>{{ pedido.mail }}</td>
+                    <td>{{ pedido.total }} €</td>
+                    <td>{{ pedido.estado }}</td>
+                    <td>{{ pedido.fecha_pedido }}</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+        }
+    </section>
+
+</div>

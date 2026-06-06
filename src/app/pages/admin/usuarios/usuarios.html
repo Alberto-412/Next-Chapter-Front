@@ -1,0 +1,95 @@
+<div class="usuarios-container">
+    <h1>Gestión de Usuarios</h1>
+
+    @if (mensaje) {
+    <p class="mensaje-ok">{{ mensaje }}</p>
+    }
+    @if (error) {
+    <p class="mensaje-error">{{ error }}</p>
+    }
+
+    <!-- LISTADO -->
+    @if (!usuarioSeleccionado) {
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Rol</th>
+                <th>Activo</th>
+                <th>Validado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (usuario of usuarios; track usuario.id) {
+            <tr>
+                <td>{{ usuario.id }}</td>
+                <td>{{ usuario.nombre }}</td>
+                <td>{{ usuario.mail }}</td>
+                <td>{{ usuario.rol }}</td>
+                <td>{{ usuario.activo ? 'Sí' : 'No' }}</td>
+                <td>{{ usuario.validado ? 'Sí' : 'No' }}</td>
+                <td>
+                    <button (click)="verUsuario(usuario.id)">Ver</button>
+                    <button (click)="editarUsuario(usuario.id)">Editar</button>
+                    @if (!usuario.validado) {
+                    <button (click)="validarUsuario(usuario.id)">Validar</button>
+                    }
+                    <button (click)="cambiarRol(usuario.id, usuario.rol === 'admin' ? 'cliente' : 'admin')">
+                        {{ usuario.rol === 'admin' ? 'Quitar admin' : 'Hacer admin' }}
+                    </button>
+                    <button (click)="darDeBaja(usuario.id)">Dar de baja</button>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    }
+
+    <!-- DETALLE -->
+    @if (usuarioSeleccionado && !modoEdicion) {
+    <div>
+        <h2>Detalle del usuario</h2>
+        <p><strong>ID:</strong> {{ usuarioSeleccionado.id }}</p>
+        <p><strong>Nombre:</strong> {{ usuarioSeleccionado.nombre }}</p>
+        <p><strong>Email:</strong> {{ usuarioSeleccionado.mail }}</p>
+        <p><strong>Teléfono:</strong> {{ usuarioSeleccionado.telefono }}</p>
+        <p><strong>Dirección:</strong> {{ usuarioSeleccionado.direccion }}</p>
+        <p><strong>Rol:</strong> {{ usuarioSeleccionado.rol }}</p>
+        <p><strong>Activo:</strong> {{ usuarioSeleccionado.activo ? 'Sí' : 'No' }}</p>
+        <p><strong>Validado:</strong> {{ usuarioSeleccionado.validado ? 'Sí' : 'No' }}</p>
+        <p><strong>Fecha de registro:</strong> {{ usuarioSeleccionado.fecha_registro }}</p>
+        <button (click)="cerrarDetalle()">Volver</button>
+    </div>
+    }
+
+    <!-- EDICIÓN -->
+    @if (usuarioSeleccionado && modoEdicion) {
+    <div>
+        <h2>Editar usuario</h2>
+        <label>Nombre</label>
+        <input [(ngModel)]="usuarioSeleccionado.nombre" />
+        <label>Email</label>
+        <input [(ngModel)]="usuarioSeleccionado.mail" />
+        <label>Teléfono</label>
+        <input [(ngModel)]="usuarioSeleccionado.telefono" />
+        <label>Dirección</label>
+        <input [(ngModel)]="usuarioSeleccionado.direccion" />
+        <label>Rol</label>
+        <select [(ngModel)]="usuarioSeleccionado.rol">
+            <option value="cliente">Cliente</option>
+            <option value="admin">Admin</option>
+        </select>
+        <label>Activo</label>
+        <select [(ngModel)]="usuarioSeleccionado.activo">
+            <option [value]="1">Sí</option>
+            <option [value]="0">No</option>
+        </select>
+        <button (click)="guardarUsuario()">Guardar</button>
+        <button (click)="cerrarDetalle()">Cancelar</button>
+    </div>
+    }
+
+</div>

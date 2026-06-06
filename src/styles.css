@@ -1,1 +1,20 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --midnight-express: #1f2a44;
+  --medium-slate-blue: #7c4dff;
+  --scarlet-red: #ff4d6d;
+  --buddha-gold: #ffc83d;
+  --dark-teal: #2ec4b6;
+  --light-grayish: #f7f3e9;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
+}
+
+body {
+  background-color: var(--light-grayish);
+  color: var(--midnight-express);
+}

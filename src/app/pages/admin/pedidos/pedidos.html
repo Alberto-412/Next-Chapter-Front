@@ -1,0 +1,97 @@
+<div class="pedidos-container">
+    <h1>Gestión de Pedidos</h1>
+
+    @if (mensaje) {
+    <p class="mensaje-ok">{{ mensaje }}</p>
+    }
+    @if (error) {
+    <p class="mensaje-error">{{ error }}</p>
+    }
+
+    <!-- LISTADO -->
+    @if (!pedidoSeleccionado) {
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Cliente</th>
+                <th>Email</th>
+                <th>Total</th>
+                <th>Estado</th>
+                <th>Fecha</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (pedido of pedidos; track pedido.id) {
+            <tr>
+                <td>{{ pedido.id }}</td>
+                <td>{{ pedido.cliente }}</td>
+                <td>{{ pedido.mail }}</td>
+                <td>{{ pedido.total }} €</td>
+                <td>{{ pedido.estado }}</td>
+                <td>{{ pedido.fecha_pedido }}</td>
+                <td>
+                    <button (click)="verPedido(pedido.id)">Ver detalle</button>
+                    <select (change)="actualizarEstado(pedido.id, $any($event.target).value)">
+                        <option value="">Cambiar estado</option>
+                        @for (estado of estadosValidos; track estado) {
+                        <option [value]="estado">{{ estado }}</option>
+                        }
+                    </select>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    }
+
+    <!-- DETALLE -->
+    @if (pedidoSeleccionado) {
+    <div>
+        <h2>Detalle del pedido #{{ pedidoSeleccionado[0]?.id }}</h2>
+        <p><strong>Cliente:</strong> {{ pedidoSeleccionado[0]?.cliente }}</p>
+        <p><strong>Email:</strong> {{ pedidoSeleccionado[0]?.mail }}</p>
+        <p><strong>Teléfono:</strong> {{ pedidoSeleccionado[0]?.telefono }}</p>
+        <p><strong>Dirección de envío:</strong> {{ pedidoSeleccionado[0]?.direccion_envio }}</p>
+        <p><strong>Método de pago:</strong> {{ pedidoSeleccionado[0]?.metodo_pago }}</p>
+        <p><strong>Estado:</strong> {{ pedidoSeleccionado[0]?.estado }}</p>
+        <p><strong>Total:</strong> {{ pedidoSeleccionado[0]?.total }} €</p>
+        <p><strong>Fecha:</strong> {{ pedidoSeleccionado[0]?.fecha_pedido }}</p>
+
+        <h3>Productos del pedido</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Cantidad</th>
+                    <th>Precio unidad</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (item of pedidoSeleccionado; track item.producto_id) {
+                <tr>
+                    <td>{{ item.titulo }}</td>
+                    <td>{{ item.cantidad }}</td>
+                    <td>{{ item.precio_unidad }} €</td>
+                    <td>{{ item.cantidad * item.precio_unidad }} €</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+
+        <label>Cambiar estado:</label>
+        <select (change)="actualizarEstado(pedidoSeleccionado[0].id, $any($event.target).value)">
+            <option value="">Seleccionar estado</option>
+            @for (estado of estadosValidos; track estado) {
+            <option [value]="estado">{{ estado }}</option>
+            }
+        </select>
+
+        <br>
+        <button (click)="cerrar()">Volver</button>
+    </div>
+    }
+
+</div>
