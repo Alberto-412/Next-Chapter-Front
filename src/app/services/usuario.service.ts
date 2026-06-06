@@ -1,27 +1,24 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../environment';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class UsuarioService {
 
+  private http = inject(HttpClient);
   private apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
-
-  private getHeaders() {
+  private getHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
     return new HttpHeaders({ Authorization: `Bearer ${token}` });
   }
 
   // --- AUTH ---
-  register(datos: any) {
+  register(datos: unknown) {
     return this.http.post(`${this.apiUrl}/auth/register`, datos);
   }
 
-  login(datos: any) {
+  login(datos: unknown) {
     return this.http.post(`${this.apiUrl}/auth/login`, datos);
   }
 
@@ -34,17 +31,17 @@ export class UsuarioService {
     return this.http.get(`${this.apiUrl}/profile`, { headers: this.getHeaders() });
   }
 
-  updatePerfil(datos: any) {
+  updatePerfil(datos: unknown) {
     return this.http.put(`${this.apiUrl}/profile`, datos, { headers: this.getHeaders() });
   }
 
-updatePassword(datos: any) {
+  updatePassword(datos: { contrasenaActual: string; contrasenaNueva: string }) {
     const body = {
-        contraseñaActual: datos.contrasenaActual,
-        contraseñaNueva: datos.contrasenaNueva
+      contraseñaActual: datos.contrasenaActual,
+      contraseñaNueva: datos.contrasenaNueva
     };
     return this.http.put(`${this.apiUrl}/profile/password`, body, { headers: this.getHeaders() });
-}
+  }
 
   deletePerfil() {
     return this.http.delete(`${this.apiUrl}/profile`, { headers: this.getHeaders() });
@@ -68,11 +65,11 @@ updatePassword(datos: any) {
     return this.http.get(`${this.apiUrl}/reviews`, { headers: this.getHeaders() });
   }
 
-  addReview(datos: any) {
+  addReview(datos: unknown) {
     return this.http.post(`${this.apiUrl}/reviews`, datos, { headers: this.getHeaders() });
   }
 
-  updateReview(reviewId: number, datos: any) {
+  updateReview(reviewId: number, datos: unknown) {
     return this.http.put(`${this.apiUrl}/reviews/${reviewId}`, datos, { headers: this.getHeaders() });
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminService } from '../../../services/admin.service';
@@ -11,26 +11,26 @@ import { AdminService } from '../../../services/admin.service';
 })
 export class Productos implements OnInit {
 
-  productos: any[] = [];
-  productoSeleccionado: any = null;
-  modoEdicion: boolean = false;
-  modoCreacion: boolean = false;
-  mensaje: string = '';
-  error: string = '';
+  private adminService = inject(AdminService);
 
-  nuevoProducto = {
+  productos = signal<any[]>([]);
+  productoSeleccionado = signal<any>(null);
+  modoEdicion = signal(false);
+  modoCreacion = signal(false);
+  mensaje = signal('');
+  error = signal('');
+
+  nuevoProducto = signal({
     titulo: '',
     descripcion: '',
     isbn: '',
-    precio: null,
+    precio: null as number | null,
     stock: 0,
     pre_reserva: 0,
     imagen: '',
     fecha_publicacion: '',
-    id_editorial: null
-  };
-
-  constructor(private adminService: AdminService, private cdr: ChangeDetectorRef) {}
+    id_editorial: null as number | null
+  });
 
   ngOnInit() {
     this.cargarProductos();
@@ -38,73 +38,54 @@ export class Productos implements OnInit {
 
   cargarProductos() {
     this.adminService.getProducts().subscribe({
-      next: (data: any) => {
-        this.productos = [...data];
-        this.cdr.detectChanges();
-      },
-      error: (err: any) => {
-        console.log(err);
-        this.error = 'Error al cargar los productos'
-      }
-    });
-  }
-
-  verProducto(productId: number) {
-    this.adminService.getProductById(productId).subscribe({
-      next: (data: any) => {
-        this.productoSeleccionado = data;
-        this.modoEdicion = false;
-        this.modoCreacion = false;
-        this.cdr.detectChanges();
-      },
-      error: () => this.error = 'Error al cargar el producto'
+      next: (data: any) => this.productos.set(data),
+      error: () => this.error.set('Error al cargar los productos')
     });
   }
 
   editarProducto(productId: number) {
     this.adminService.getProductById(productId).subscribe({
       next: (data: any) => {
-        this.productoSeleccionado = { ...data };
-        this.modoEdicion = true;
-        this.modoCreacion = false;
-        this.cdr.detectChanges();
+        this.productoSeleccionado.set({ ...data });
+        this.modoEdicion.set(true);
+        this.modoCreacion.set(false);
       },
-      error: () => this.error = 'Error al cargar el producto'
+      error: () => this.error.set('Error al cargar el producto')
     });
   }
 
   guardarProducto() {
-    this.adminService.updateProduct(this.productoSeleccionado.id, this.productoSeleccionado).subscribe({
+    this.adminService.updateProduct(this.productoSeleccionado().id, this.productoSeleccionado()).subscribe({
       next: () => {
-        this.mensaje = 'Producto actualizado correctamente';
-        this.modoEdicion = false;
-        this.productoSeleccionado = null;
+        this.mensaje.set('Producto actualizado correctamente');
+        this.modoEdicion.set(false);
+        this.productoSeleccionado.set(null);
         this.cargarProductos();
       },
-      error: () => this.error = 'Error al actualizar el producto'
+      error: () => this.error.set('Error al actualizar el producto')
     });
   }
 
   mostrarFormularioCreacion() {
-    this.modoCreacion = true;
-    this.modoEdicion = false;
-    this.productoSeleccionado = null;
-    this.mensaje = '';
-    this.error = '';
+    this.modoCreacion.set(true);
+    this.modoEdicion.set(false);
+    this.productoSeleccionado.set(null);
+    this.mensaje.set('');
+    this.error.set('');
   }
 
   crearProducto() {
-    this.adminService.createProduct(this.nuevoProducto).subscribe({
+    this.adminService.createProduct(this.nuevoProducto()).subscribe({
       next: () => {
-        this.mensaje = 'Producto creado correctamente';
-        this.modoCreacion = false;
-        this.nuevoProducto = {
+        this.mensaje.set('Producto creado correctamente');
+        this.modoCreacion.set(false);
+        this.nuevoProducto.set({
           titulo: '', descripcion: '', isbn: '', precio: null,
           stock: 0, pre_reserva: 0, imagen: '', fecha_publicacion: '', id_editorial: null
-        };
+        });
         this.cargarProductos();
       },
-      error: () => this.error = 'Error al crear el producto'
+      error: () => this.error.set('Error al crear el producto')
     });
   }
 
@@ -112,20 +93,28 @@ export class Productos implements OnInit {
     if (confirm('¿Estás seguro de eliminar este producto?')) {
       this.adminService.deleteProduct(productId).subscribe({
         next: () => {
-          this.mensaje = 'Producto eliminado correctamente';
-          this.productoSeleccionado = null;
+          this.mensaje.set('Producto eliminado correctamente');
+          this.productoSeleccionado.set(null);
           this.cargarProductos();
         },
-        error: (err: any) => this.error = err.error?.message || 'Error al eliminar el producto'
+        error: (err: any) => this.error.set(err.error?.message || 'Error al eliminar el producto')
       });
     }
   }
 
+  updateNuevoProducto(field: string, value: unknown) {
+    this.nuevoProducto.update(p => ({ ...p, [field]: value }));
+  }
+
+  updateProductoSeleccionado(field: string, value: unknown) {
+    this.productoSeleccionado.update(p => ({ ...p, [field]: value }));
+  }
+
   cerrar() {
-    this.productoSeleccionado = null;
-    this.modoEdicion = false;
-    this.modoCreacion = false;
-    this.mensaje = '';
-    this.error = '';
+    this.productoSeleccionado.set(null);
+    this.modoEdicion.set(false);
+    this.modoCreacion.set(false);
+    this.mensaje.set('');
+    this.error.set('');
   }
 }

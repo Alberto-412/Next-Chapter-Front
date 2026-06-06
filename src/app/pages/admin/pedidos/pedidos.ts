@@ -1,24 +1,30 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
 import { AdminService } from '../../../services/admin.service';
 
 @Component({
   selector: 'app-pedidos',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, DatePipe],
   templateUrl: './pedidos.html',
   styleUrl: './pedidos.css'
 })
 export class Pedidos implements OnInit {
 
-  pedidos: any[] = [];
-  pedidoSeleccionado: any = null;
-  mensaje: string = '';
-  error: string = '';
+  private adminService = inject(AdminService);
+
+  pedidos = signal<any[]>([]);
+  pedidoSeleccionado = signal<any>(null);
+  estadoFiltro = signal('');
+  mensaje = signal('');
+  error = signal('');
 
   estadosValidos = ['pendiente', 'procesando', 'enviado', 'entregado', 'cancelado'];
 
-  constructor(private adminService: AdminService, private cdr: ChangeDetectorRef) {}
+  pedidosFiltrados = computed(() => {
+    const estado = this.estadoFiltro();
+    if (!estado) return this.pedidos();
+    return this.pedidos().filter(p => p.estado === estado);
+  });
 
   ngOnInit() {
     this.cargarPedidos();
@@ -26,43 +32,40 @@ export class Pedidos implements OnInit {
 
   cargarPedidos() {
     this.adminService.getOrders().subscribe({
-      next: (data: any) => {
-        this.pedidos = [...data];
-        this.cdr.detectChanges();
-      },
-      error: (err: any) => {
-        console.log(err);
-        this.error = 'Error al cargar los pedidos'
-      }
+      next: (data: any) => this.pedidos.set(data),
+      error: () => this.error.set('Error al cargar los pedidos')
     });
   }
 
-  verPedido(orderId: number) {
-    this.adminService.getOrderById(orderId).subscribe({
-      next: (data: any) => {
-        this.pedidoSeleccionado = data;
-        this.mensaje = '';
-        this.error = '';
-        this.cdr.detectChanges();
-      },
-      error: () => this.error = 'Error al cargar el pedido'
-    });
+  filtrarEstado(estado: string) {
+    this.estadoFiltro.set(estado);
   }
+
+verPedido(orderId: number) {
+  this.adminService.getOrderById(orderId).subscribe({
+    next: (data: any) => {
+      this.pedidoSeleccionado.set(data);
+      this.mensaje.set('');
+      this.error.set('');
+    },
+    error: () => this.error.set('Error al cargar el pedido')
+  });
+}
 
   actualizarEstado(orderId: number, estado: string) {
     if (!estado) return;
     this.adminService.updateOrderStatus(orderId, estado).subscribe({
       next: () => {
-        this.mensaje = 'Estado actualizado correctamente';
+        this.mensaje.set('Estado actualizado correctamente');
         this.cargarPedidos();
       },
-      error: () => this.error = 'Error al actualizar el estado'
+      error: () => this.error.set('Error al actualizar el estado')
     });
   }
 
   cerrar() {
-    this.pedidoSeleccionado = null;
-    this.mensaje = '';
-    this.error = '';
+    this.pedidoSeleccionado.set(null);
+    this.mensaje.set('');
+    this.error.set('');
   }
 }

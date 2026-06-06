@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
 import { authGuard, adminGuard } from './guards/auth.guard';
 
-
 // Admin
+import { AdminLayout } from './pages/admin/admin-layout/admin-layout';
 import { Dashboard } from './pages/admin/dashboard/dashboard';
 import { Productos } from './pages/admin/productos/productos';
 import { Pedidos } from './pages/admin/pedidos/pedidos';
@@ -18,24 +18,28 @@ import { Login } from './pages/login/login';
 
 export const routes: Routes = [
 
-  // Rutas públicas (sin guard)
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  // Rutas públicas
   { path: 'login', component: Login },
-  // aquí irán home, catalogo, producto...
 
+  // Rutas admin con layout y guard
+  {
+    path: 'admin',
+    component: AdminLayout,
+    canActivate: [adminGuard],
+    children: [
+      { path: 'dashboard', component: Dashboard },
+      { path: 'productos', component: Productos },
+      { path: 'pedidos', component: Pedidos },
+      { path: 'usuarios', component: Usuarios },
+    ]
+  },
 
-  // Rutas admin (protegidas con adminGuard)
-  { path: 'admin/dashboard', component: Dashboard, canActivate: [adminGuard] },
-  { path: 'admin/productos', component: Productos, canActivate: [adminGuard] },
-  { path: 'admin/pedidos', component: Pedidos, canActivate: [adminGuard] },
-  { path: 'admin/usuarios', component: Usuarios, canActivate: [adminGuard] },
-
-  // Rutas usuario (protegidas con authGuard)
+  // Rutas usuario
   { path: 'perfil', component: Perfil, canActivate: [authGuard] },
   { path: 'wishlist', component: Wishlist, canActivate: [authGuard] },
   { path: 'reviews', component: Reviews, canActivate: [authGuard] },
 
   // Ruta por defecto
-  { path: '', redirectTo: 'catálogo', pathMatch: 'full' }
+  { path: '', redirectTo: 'login', pathMatch: 'full' }
 
 ];

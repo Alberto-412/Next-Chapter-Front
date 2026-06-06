@@ -1,24 +1,17 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../environment';
 
-@Injectable({
-  providedIn: 'root'
-})
-
+@Injectable({ providedIn: 'root' })
 export class AdminService {
 
+  private http = inject(HttpClient);
   private apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
-
-  //lee el token del localStorage y lo añade automáticamente a cada petición que lo necesita, para no repetir ese código en cada llamada
-  private getHeaders() {    
+  private getHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
     return new HttpHeaders({ Authorization: `Bearer ${token}` });
   }
-
-  // llamadas HTTP al backend. Cada método corresponde a una petición al backend para las funcionalidades de administración. Por ejemplo, getUsuariosPendientes() hace una petición GET a /admin/usuarios/pendientes para obtener la lista de usuarios que están pendientes de validación. Cada método devuelve un Observable que el componente puede suscribirse para manejar la respuesta.
 
   // --- USUARIOS ---
   getUsuariosPendientes() {
@@ -41,7 +34,7 @@ export class AdminService {
     return this.http.get(`${this.apiUrl}/admin/usuarios/${userId}`, { headers: this.getHeaders() });
   }
 
-  updateUsuario(userId: number, datos: any) {
+  updateUsuario(userId: number, datos: unknown) {
     return this.http.put(`${this.apiUrl}/admin/usuarios/${userId}`, datos, { headers: this.getHeaders() });
   }
 
@@ -58,11 +51,11 @@ export class AdminService {
     return this.http.get(`${this.apiUrl}/admin/products/${productId}`, { headers: this.getHeaders() });
   }
 
-  createProduct(datos: any) {
+  createProduct(datos: unknown) {
     return this.http.post(`${this.apiUrl}/admin/products`, datos, { headers: this.getHeaders() });
   }
 
-  updateProduct(productId: number, datos: any) {
+  updateProduct(productId: number, datos: unknown) {
     return this.http.put(`${this.apiUrl}/admin/products/${productId}`, datos, { headers: this.getHeaders() });
   }
 
