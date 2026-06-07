@@ -1,95 +1,199 @@
 <div class="dashboard">
+
     <div class="page-header">
         <div>
             <h1>Dashboard</h1>
-            <p>Bienvenido al panel de administración de NextChapter</p>
+            <p>Panel de administración de NextChapter</p>
         </div>
     </div>
 
     @if (error()) {
-    <p class="error">{{ error() }}</p>
+    <p class="msg-error">{{ error() }}</p>
     }
 
+    <!-- STATS -->
+    @if (stats()) {
     <div class="stats-grid">
         <div class="stat-card">
-            <div class="stat-icon purple">📦</div>
+            <div class="stat-icon purple">
+                <span class="material-symbols-outlined">shopping_bag</span>
+            </div>
             <div class="stat-info">
                 <span class="stat-label">Pedidos totales</span>
-                <span class="stat-value">{{ totalPedidos() }}</span>
+                <span class="stat-value">{{ stats().total_pedidos }}</span>
             </div>
         </div>
         <div class="stat-card">
-            <div class="stat-icon green">✅</div>
+            <div class="stat-icon green">
+                <span class="material-symbols-outlined">check_circle</span>
+            </div>
             <div class="stat-info">
-                <span class="stat-label">Entregados</span>
-                <span class="stat-value">{{ totalEntregados() }}</span>
+                <span class="stat-label">Pedidos entregados</span>
+                <span class="stat-value">{{ stats().entregados }}</span>
             </div>
         </div>
         <div class="stat-card">
-            <div class="stat-icon orange">⏳</div>
+            <div class="stat-icon orange">
+                <span class="material-symbols-outlined">local_shipping</span>
+            </div>
             <div class="stat-info">
-                <span class="stat-label">Pendientes validación</span>
-                <span class="stat-value">{{ usuariosPendientes().length }}</span>
+                <span class="stat-label">Envíos en proceso</span>
+                <span class="stat-value">{{ stats().en_proceso }}</span>
             </div>
         </div>
         <div class="stat-card">
-            <div class="stat-icon red">❌</div>
+            <div class="stat-icon red">
+                <span class="material-symbols-outlined">cancel</span>
+            </div>
             <div class="stat-info">
                 <span class="stat-label">Cancelados</span>
-                <span class="stat-value">{{ totalCancelados() }}</span>
+                <span class="stat-value">{{ stats().cancelados }}</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon teal">
+                <span class="material-symbols-outlined">euro</span>
+            </div>
+            <div class="stat-info">
+                <span class="stat-label">Ingresos totales</span>
+                <span class="stat-value">{{ stats().ingresos_totales | number:'1.2-2' }} €</span>
             </div>
         </div>
     </div>
+    }
 
-    <div class="dashboard-grid">
-        <div class="card">
-            <div class="card-header">
-                <h2>Pedidos recientes</h2>
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Cliente</th>
-                        <th>Total</th>
-                        <th>Estado</th>
-                        <th>Fecha</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (pedido of pedidos().slice(0, 8); track pedido.id) {
-                    <tr>
-                        <td>#{{ pedido.id }}</td>
-                        <td>{{ pedido.cliente }}</td>
-                        <td>{{ pedido.total }} €</td>
-                        <td><span class="badge" [class]="pedido.estado">{{ pedido.estado }}</span></td>
-                        <td>{{ pedido.fecha_pedido | date:'dd/MM/yyyy' }}</td>
-                    </tr>
-                    }
-                </tbody>
-            </table>
+    <!-- PEDIDOS RECIENTES -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Pedidos Recientes</h2>
         </div>
 
-        <div class="card">
-            <div class="card-header">
-                <h2>Validación de usuarios</h2>
-                @if (usuariosPendientes().length > 0) {
-                <span class="badge-count">{{ usuariosPendientes().length }} nuevos</span>
+        @if (!pedidoSeleccionado()) {
+
+        @if (pedidosFiltrados().length > 0 || busquedaService.termino() === '') {
+        <table>
+            <thead>
+                <tr>
+                    <th>ID Pedido</th>
+                    <th>Cliente</th>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                    <th>Total</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (pedido of pedidosPaginados(); track pedido.id) {
+                <tr>
+                    <td class="pedido-id">#{{ pedido.id }}</td>
+                    <td>
+                        <div class="cliente-cell">
+                            <div class="avatar">{{ pedido.cliente ? pedido.cliente[0] : '?' }}</div>
+                            <div>
+                                <span class="cliente-nombre">{{ pedido.cliente }}</span>
+                                <span class="cliente-mail">{{ pedido.mail }}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{ pedido.fecha_pedido | date:'dd/MM/yy HH:mm' }}</td>
+                    <td><span class="badge" [class]="pedido.estado">{{ pedido.estado }}</span></td>
+                    <td>{{ pedido.total }} €</td>
+                    <td>
+                        <button class="btn-actualizar" (click)="verPedido(pedido)">
+                            <span class="btn-texto">Ver detalle</span>
+                            <span class="material-symbols-outlined">chevron_right</span>
+                        </button>
+                    </td>
+                </tr>
                 }
+            </tbody>
+        </table>
+
+        <div class="paginacion">
+            <div class="paginacion-btns">
+                <button class="pag-btn" [class.disabled]="paginaActual() === 1" (click)="irAPagina(paginaActual() - 1)">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </button>
+                @for (p of [].constructor(totalPaginas()); track $index) {
+                <button class="pag-btn" [class.active]="paginaActual() === $index + 1" (click)="irAPagina($index + 1)">
+                    {{ $index + 1 }}
+                </button>
+                }
+                <button class="pag-btn" [class.disabled]="paginaActual() === totalPaginas()"
+                    (click)="irAPagina(paginaActual() + 1)">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                </button>
             </div>
-            @if (usuariosPendientes().length === 0) {
-            <p class="empty">No hay usuarios pendientes</p>
-            }
-            @for (usuario of usuariosPendientes(); track usuario.id) {
-            <div class="user-row">
-                <div class="user-avatar">{{ usuario.nombre[0] }}</div>
-                <div class="user-info">
-                    <span class="user-name">{{ usuario.nombre }}</span>
-                    <span class="user-mail">{{ usuario.mail }}</span>
+        </div>
+        }
+
+        @if (pedidosFiltrados().length === 0 && busquedaService.termino() !== '') {
+        <p class="empty">No se encontraron pedidos para "{{ busquedaService.termino() }}"</p>
+        }
+        }
+
+        @if (pedidoSeleccionado()) {
+        <div class="detalle-pedido">
+            <div class="detalle-header">
+                <button class="btn-back" (click)="cerrarDetalle()">← Volver a pedidos</button>
+                <div class="detalle-title">
+                    <h3>Pedido #{{ pedidoSeleccionado().id }}</h3>
+                    <span class="badge" [class]="pedidoSeleccionado().estado">{{ pedidoSeleccionado().estado }}</span>
                 </div>
-                <button class="btn-aprobar" (click)="validarUsuario(usuario.id)">Aprobar</button>
             </div>
+            <div class="detalle-info">
+                <div class="info-row">
+                    <span class="info-label">Cliente</span>
+                    <span class="info-value">{{ pedidoSeleccionado().cliente }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Email</span>
+                    <span class="info-value">{{ pedidoSeleccionado().mail }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Dirección de envío</span>
+                    <span class="info-value">{{ pedidoSeleccionado().direccion_envio }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Método de pago</span>
+                    <span class="info-value">{{ pedidoSeleccionado().metodo_pago }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Total</span>
+                    <span class="info-value total">{{ pedidoSeleccionado().total }} €</span>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+
+    <!-- VALIDACIÓN USUARIOS -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Validación de Usuarios</h2>
+            @if (usuariosPendientes().length > 0) {
+            <span class="badge-count">{{ usuariosPendientes().length }} nuevos</span>
             }
         </div>
+        @if (usuariosPendientesFiltrados().length === 0 && busquedaService.termino() === '') {
+        <p class="empty">No hay usuarios pendientes de validación</p>
+        }
+        @if (usuariosPendientesFiltrados().length === 0 && busquedaService.termino() !== '') {
+        <p class="empty">No se encontraron usuarios para "{{ busquedaService.termino() }}"</p>
+        }
+        @for (usuario of usuariosPendientesFiltrados(); track usuario.id) {
+        <div class="user-row">
+            <div class="user-avatar">{{ usuario.nombre ? usuario.nombre[0] : '?' }}</div>
+            <div class="user-info">
+                <span class="user-name">{{ usuario.nombre }}</span>
+                <span class="user-mail">{{ usuario.mail }}</span>
+            </div>
+            <div class="user-actions">
+                <button class="btn-aprobar" (click)="validarUsuario(usuario.id)">Aprobar</button>
+                <button class="btn-rechazar">Rechazar</button>
+            </div>
+        </div>
+        }
     </div>
+
 </div>

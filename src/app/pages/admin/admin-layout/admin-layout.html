@@ -1,6 +1,23 @@
 <div class="admin-layout">
     <app-sidebar-admin />
-    <main class="admin-content">
-        <router-outlet />
-    </main>
+    <div class="admin-main">
+        <header class="admin-header">
+            <div class="admin-header-search">
+                <span class="material-symbols-outlined">search</span>
+                <input type="text" placeholder="Buscar pedidos, clientes..." (input)="onBuscar($event)" />
+            </div>
+            <div class="admin-header-right">
+                <div class="admin-profile">
+                    <div class="admin-profile-info">
+                        <span class="admin-name">Admin</span>
+                        <span class="admin-role">Administrador</span>
+                    </div>
+                    <div class="admin-avatar">A</div>
+                </div>
+            </div>
+        </header>
+        <main class="admin-content">
+            <router-outlet />
+        </main>
+    </div>
 </div>

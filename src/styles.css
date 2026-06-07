@@ -18,3 +18,11 @@ body {
   background-color: var(--light-grayish);
   color: var(--midnight-express);
 }
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
+}

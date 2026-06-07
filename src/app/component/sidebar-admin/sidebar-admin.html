@@ -1,12 +1,10 @@
 <div class="sidebar" [class.open]="menuOpen">
 
-    <!-- LOGO -->
     <div class="sidebar-logo">
-        <img src="image/0.75x/aalogo_vertical_next_chapter_whiteldpi.png" alt="NextChapter" />
+        <img src="image/nextchapter_logo_vertical_next_chapter_white.png" alt="NextChapter" />
         <span class="sidebar-subtitle">Panel de administración</span>
     </div>
 
-    <!-- MENÚ -->
     <nav class="sidebar-nav">
         <a routerLink="/admin/dashboard" routerLinkActive="active">
             <span class="material-symbols-outlined">home</span>
@@ -26,19 +24,11 @@
         </a>
     </nav>
 
-    <!-- FOOTER -->
     <div class="sidebar-footer">
-        <a routerLink="/admin/ajustes">
-            <span class="material-symbols-outlined">settings</span>
-            <span class="label">Ajustes</span>
+        <a href="#" (click)="$event.preventDefault()">
+            <span class="material-symbols-outlined">help</span>
+            <span class="label">Ayuda</span>
         </a>
-        <div class="sidebar-profile">
-            <div class="profile-avatar">A</div>
-            <div class="profile-info">
-                <span class="profile-name">Admin</span>
-                <span class="profile-mail">admin&#64;nextchapter.com</span>
-            </div>
-        </div>
         <button class="logout-btn" (click)="logout()">
             <span class="material-symbols-outlined">logout</span>
             <span class="label">Cerrar sesión</span>
@@ -47,10 +37,7 @@
 
 </div>
 
-<!-- OVERLAY MÓVIL -->
 <div class="sidebar-overlay" [class.visible]="menuOpen" (click)="toggleMenu()"></div>
-
-<!-- BOTÓN HAMBURGUESA -->
 <button class="hamburger" (click)="toggleMenu()">
     <span class="material-symbols-outlined">menu</span>
 </button>

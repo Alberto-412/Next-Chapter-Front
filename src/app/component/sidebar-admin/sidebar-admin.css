@@ -1,5 +1,6 @@
 .sidebar {
   width: 220px;
+  height: 100%;
   min-height: 100vh;
   background-color: var(--midnight-express);
   display: flex;
@@ -7,12 +8,14 @@
   position: fixed;
   top: 0;
   left: 0;
+  bottom: 0;
   z-index: 200;
   transition: transform 0.3s ease;
+  overflow-y: auto;
 }
 
 .sidebar-logo {
-  padding: 24px 20px 16px;
+  padding: 20px 16px 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   flex-direction: column;
@@ -21,7 +24,7 @@
 
 .sidebar-logo img {
   width: auto;
-  height: 70px;
+  height: 32px;
   object-fit: contain;
   max-width: 160px;
 }
@@ -64,6 +67,11 @@
   color: #ffffff;
 }
 
+.material-symbols-outlined {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
 .sidebar-footer {
   padding: 12px 8px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -90,53 +98,6 @@
   color: #ffffff;
 }
 
-.sidebar-profile {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  margin: 4px 0;
-}
-
-.profile-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background-color: var(--medium-slate-blue);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
-  font-weight: 700;
-  font-size: 0.9rem;
-  flex-shrink: 0;
-}
-
-.profile-info {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.profile-name {
-  color: #ffffff;
-  font-size: 0.85rem;
-  font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.profile-mail {
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 0.72rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 .logout-btn {
   display: flex;
   align-items: center;
@@ -159,23 +120,20 @@
   background-color: rgba(255, 77, 109, 0.1);
 }
 
-/* HAMBURGUESA */
 .hamburger {
   display: none;
   position: fixed;
-  top: 16px;
-  left: 16px;
+  top: 14px;
+  left: 14px;
   z-index: 300;
   background-color: var(--midnight-express);
   color: #ffffff;
   border: none;
   border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 1.2rem;
+  padding: 8px;
   cursor: pointer;
 }
 
-/* OVERLAY */
 .sidebar-overlay {
   display: none;
   position: fixed;
@@ -184,7 +142,6 @@
   z-index: 199;
 }
 
-/* RESPONSIVE */
 @media (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%);
@@ -195,7 +152,7 @@
   }
 
   .hamburger {
-    display: block;
+    display: flex;
   }
 
   .sidebar-overlay {
@@ -208,10 +165,5 @@
   .sidebar-overlay.visible {
     opacity: 1;
     pointer-events: all;
-  }
-
-  .material-symbols-outlined {
-    font-size: 20px;
-    flex-shrink: 0;
   }
 }

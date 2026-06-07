@@ -1,7 +1,8 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminService } from '../../../services/admin.service';
+import { BusquedaService } from '../../../services/busqueda.service';
 
 @Component({
   selector: 'app-productos',
@@ -12,6 +13,7 @@ import { AdminService } from '../../../services/admin.service';
 export class Productos implements OnInit {
 
   private adminService = inject(AdminService);
+  private busquedaService = inject(BusquedaService);
 
   productos = signal<any[]>([]);
   productoSeleccionado = signal<any>(null);
@@ -30,6 +32,15 @@ export class Productos implements OnInit {
     imagen: '',
     fecha_publicacion: '',
     id_editorial: null as number | null
+  });
+
+  productosFiltrados = computed(() => {
+    const termino = this.busquedaService.termino();
+    if (!termino) return this.productos();
+    return this.productos().filter(p =>
+      p.titulo?.toLowerCase().includes(termino) ||
+      p.editorial?.toLowerCase().includes(termino)
+    );
   });
 
   ngOnInit() {

@@ -1,7 +1,8 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminService } from '../../../services/admin.service';
+import { BusquedaService } from '../../../services/busqueda.service';
 
 @Component({
   selector: 'app-usuarios',
@@ -12,12 +13,22 @@ import { AdminService } from '../../../services/admin.service';
 export class Usuarios implements OnInit {
 
   private adminService = inject(AdminService);
+  private busquedaService = inject(BusquedaService);
 
   usuarios = signal<any[]>([]);
   usuarioSeleccionado = signal<any>(null);
   modoEdicion = signal(false);
   mensaje = signal('');
   error = signal('');
+
+  usuariosFiltrados = computed(() => {
+    const termino = this.busquedaService.termino();
+    if (!termino) return this.usuarios();
+    return this.usuarios().filter(u =>
+      u.nombre?.toLowerCase().includes(termino) ||
+      u.mail?.toLowerCase().includes(termino)
+    );
+  });
 
   ngOnInit() {
     this.cargarUsuarios();
