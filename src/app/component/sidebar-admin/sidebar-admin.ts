@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -12,8 +12,11 @@ export class SidebarAdmin {
 
   menuOpen: boolean = false;
 
+  @Output() menuToggled = new EventEmitter<boolean>();
+
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
+    this.menuToggled.emit(this.menuOpen);
   }
 
   logout() {

@@ -1,6 +1,7 @@
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { AdminService } from '../../../services/admin.service';
+import { BusquedaService } from '../../../services/busqueda.service';
 
 @Component({
   selector: 'app-pedidos',
@@ -11,6 +12,7 @@ import { AdminService } from '../../../services/admin.service';
 export class Pedidos implements OnInit {
 
   private adminService = inject(AdminService);
+  private busquedaService = inject(BusquedaService);
 
   pedidos = signal<any[]>([]);
   pedidoSeleccionado = signal<any>(null);
@@ -22,8 +24,27 @@ export class Pedidos implements OnInit {
 
   pedidosFiltrados = computed(() => {
     const estado = this.estadoFiltro();
-    if (!estado) return this.pedidos();
-    return this.pedidos().filter(p => p.estado === estado);
+    const termino = this.busquedaService.termino();
+
+    let resultado = this.pedidos();
+
+    if (estado) {
+      resultado = resultado.filter(p => p.estado === estado);
+    }
+
+    if (termino) {
+      const esNumero = !isNaN(Number(termino));
+      if (esNumero) {
+        resultado = resultado.filter(p => String(p.id).includes(termino));
+      } else {
+        resultado = resultado.filter(p =>
+          p.cliente?.toLowerCase().includes(termino) ||
+          p.mail?.toLowerCase().includes(termino)
+        );
+      }
+    }
+
+    return resultado;
   });
 
   ngOnInit() {
@@ -41,16 +62,16 @@ export class Pedidos implements OnInit {
     this.estadoFiltro.set(estado);
   }
 
-verPedido(orderId: number) {
-  this.adminService.getOrderById(orderId).subscribe({
-    next: (data: any) => {
-      this.pedidoSeleccionado.set(data);
-      this.mensaje.set('');
-      this.error.set('');
-    },
-    error: () => this.error.set('Error al cargar el pedido')
-  });
-}
+  verPedido(orderId: number) {
+    this.adminService.getOrderById(orderId).subscribe({
+      next: (data: any) => {
+        this.pedidoSeleccionado.set(data);
+        this.mensaje.set('');
+        this.error.set('');
+      },
+      error: () => this.error.set('Error al cargar el pedido')
+    });
+  }
 
   actualizarEstado(orderId: number, estado: string) {
     if (!estado) return;

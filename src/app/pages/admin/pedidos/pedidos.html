@@ -23,15 +23,17 @@
                 </select>
             </div>
         </div>
-        <table>
+
+        <!-- Tabla desktop -->
+        <table class="tabla-desktop">
             <thead>
                 <tr>
-                    <th>ID Pedido</th>
+                    <th>ID</th>
                     <th>Cliente</th>
                     <th>Fecha</th>
                     <th>Estado</th>
                     <th>Total</th>
-                    <th>Acciones</th>
+                    <th>Acción</th>
                 </tr>
             </thead>
             <tbody>
@@ -51,21 +53,45 @@
                     <td><span class="badge" [class]="pedido.estado">{{ pedido.estado }}</span></td>
                     <td>{{ pedido.total }} €</td>
                     <td>
-                        <div class="acciones">
-                            <button class="btn-ver" (click)="verPedido(pedido.id)">👁 Ver</button>
-                            <select class="select-estado"
-                                (change)="actualizarEstado(pedido.id, $any($event.target).value)">
-                                <option value="">Cambiar estado</option>
-                                @for (estado of estadosValidos; track estado) {
-                                <option [value]="estado">{{ estado }}</option>
-                                }
-                            </select>
-                        </div>
+                        <button class="btn-ver" (click)="verPedido(pedido.id)">👁 Ver</button>
                     </td>
                 </tr>
                 }
             </tbody>
         </table>
+
+        <!-- Tarjetas móvil -->
+        <div class="lista-mobile">
+            @for (pedido of pedidosFiltrados(); track pedido.id) {
+            <div class="pedido-card">
+                <div class="pedido-card-top">
+                    <div class="cliente-cell">
+                        <div class="avatar">{{ pedido.cliente ? pedido.cliente[0] : '?' }}</div>
+                        <div>
+                            <span class="cliente-nombre">{{ pedido.cliente }}</span>
+                            <span class="cliente-mail">{{ pedido.mail }}</span>
+                        </div>
+                    </div>
+                    <span class="badge" [class]="pedido.estado">{{ pedido.estado }}</span>
+                </div>
+                <div class="pedido-card-info">
+                    <span class="info-chip"><span class="chip-label">ID</span> #{{ pedido.id }}</span>
+                    <span class="info-chip"><span class="chip-label">Fecha</span> {{ pedido.fecha_pedido |
+                        date:'dd/MM/yy' }}</span>
+                    <span class="info-chip"><span class="chip-label">Total</span> {{ pedido.total }} €</span>
+                </div>
+                <div class="pedido-card-acciones">
+                    <button class="btn-ver" (click)="verPedido(pedido.id)">👁 Ver pedido</button>
+                    <select class="select-estado" (change)="actualizarEstado(pedido.id, $any($event.target).value)">
+                        <option value="">Cambiar estado</option>
+                        @for (estado of estadosValidos; track estado) {
+                        <option [value]="estado">{{ estado }}</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            }
+        </div>
     </div>
     }
 

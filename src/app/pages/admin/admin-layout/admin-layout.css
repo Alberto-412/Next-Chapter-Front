@@ -131,11 +131,53 @@
   padding: 20px 24px;
 }
 
+.admin-header-left {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.hamburger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  color: var(--midnight-express);
+  border: none;
+  border-radius: 8px;
+  padding: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.hamburger:hover {
+  background-color: #f0f0f5;
+}
+
+.hamburger .material-symbols-outlined {
+  font-size: 22px;
+}
+
+.mobile-logo {
+  display: flex;
+  align-items: center;
+}
+
+.mobile-logo img {
+  height: 20px;
+  width: auto;
+}
+
 @media (max-width: 768px) {
   .admin-main {
     margin-left: 0;
     width: 100%;
     overflow-x: hidden;
+  }
+
+  .admin-header-left {
+    display: flex;
   }
 
   .admin-content {
@@ -144,6 +186,16 @@
   }
 
   .admin-header {
-    padding: 0 12px;
+    padding: 0 10px;
+    gap: 8px;
+  }
+
+  .admin-header-search {
+    max-width: none;
+    padding: 8px 10px;
+  }
+
+  .admin-profile-info {
+    display: none;
   }
 }

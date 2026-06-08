@@ -84,6 +84,22 @@ tr:last-child td {
   border-bottom: none;
 }
 
+.tabla-desktop th:nth-child(1) {
+  width: 70px;
+}
+.tabla-desktop th:nth-child(3) {
+  width: 100px;
+}
+.tabla-desktop th:nth-child(4) {
+  width: 110px;
+}
+.tabla-desktop th:nth-child(5) {
+  width: 80px;
+}
+.tabla-desktop th:nth-child(6) {
+  width: 80px;
+}
+
 .cliente-cell {
   display: flex;
   align-items: center;
@@ -108,12 +124,20 @@ tr:last-child td {
   display: block;
   font-weight: 600;
   font-size: 0.85rem;
+  max-width: 160px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .cliente-mail {
   display: block;
   font-size: 0.75rem;
   color: #6b7280;
+  max-width: 160px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .badge {
@@ -143,12 +167,6 @@ tr:last-child td {
 .badge.cancelado {
   background: rgba(255, 77, 109, 0.12);
   color: #ff4d6d;
-}
-
-.acciones {
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
 .btn-ver {
@@ -285,9 +303,94 @@ tr:last-child td {
   }
 }
 
-@media (max-width: 600px) {
-  .acciones {
+/* ── Móvil ── */
+.lista-mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .tabla-desktop {
+    display: none;
+  }
+
+  .lista-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .card-header {
     flex-direction: column;
     align-items: flex-start;
+    gap: 12px;
+  }
+
+  .filtros select {
+    width: 100%;
+  }
+
+  .page-header h1 {
+    font-size: 1.3rem;
+  }
+
+  .pedido-card {
+    border: 1px solid #f3f4f6;
+    border-radius: 12px;
+    padding: 14px;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pedido-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .pedido-card-info {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .info-chip {
+    background: #f5f6fa;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 0.8rem;
+    color: var(--midnight-express);
+    font-weight: 500;
+  }
+
+  .chip-label {
+    font-size: 0.7rem;
+    color: #9ca3af;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-right: 4px;
+  }
+
+  .pedido-card-acciones {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    border-top: 1px solid #f3f4f6;
+    padding-top: 10px;
+  }
+
+  .pedido-card-acciones .btn-ver {
+    white-space: nowrap;
+  }
+
+  .pedido-card-acciones .select-estado {
+    flex: 1;
   }
 }

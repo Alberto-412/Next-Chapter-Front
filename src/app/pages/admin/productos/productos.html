@@ -22,7 +22,9 @@
         <div class="card-header">
             <h2>Todos los productos</h2>
         </div>
-        <table>
+
+        <!-- Tabla desktop -->
+        <table class="tabla-desktop">
             <thead>
                 <tr>
                     <th>Producto</th>
@@ -69,6 +71,41 @@
                 }
             </tbody>
         </table>
+
+        <!-- Tarjetas móvil -->
+        <div class="lista-mobile">
+            @for (producto of productosFiltrados(); track producto.id) {
+            <div class="producto-card">
+                <div class="producto-card-img">
+                    @if (producto.imagen) {
+                    <img [src]="producto.imagen" alt="{{ producto.titulo }}" />
+                    } @else {
+                    <div class="producto-img-placeholder grande">
+                        <span class="material-symbols-outlined">book_2</span>
+                    </div>
+                    }
+                </div>
+                <div class="producto-card-info">
+                    <span class="producto-titulo">{{ producto.titulo }}</span>
+                    <span class="producto-isbn">ISBN: {{ producto.isbn }}</span>
+                    <div class="producto-card-meta">
+                        <span class="info-chip"><span class="chip-label">Stock</span>
+                            <span [class.stock-bajo]="producto.stock < 5">{{ producto.stock }}</span>
+                        </span>
+                        <span class="info-chip"><span class="chip-label">Precio</span> {{ producto.precio }} €</span>
+                    </div>
+                    <div class="acciones">
+                        <button class="btn-icon" (click)="editarProducto(producto.id)" title="Editar">
+                            <span class="material-symbols-outlined">edit</span>
+                        </button>
+                        <button class="btn-icon danger" (click)="eliminarProducto(producto.id)" title="Eliminar">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
     </div>
     }
 
