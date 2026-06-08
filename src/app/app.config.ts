@@ -7,6 +7,11 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideHttpClient()    //para que Angular pueda hacer llamadas HTTP al backend
+
+    /**
+     * Esto activa HttpClient en toda la aplicación.
+     * Sin esto, los servicios no podrán hacer peticiones HTTP.
+     */
+    provideHttpClient(),
   ],
 };

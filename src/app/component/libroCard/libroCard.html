@@ -1,0 +1,29 @@
+<article class="libro-card">
+
+    <img class="libro-card__imagen" [src]="libro().imagen" [alt]="'Portada de ' + libro().titulo" />
+
+    <div class="libro-card__body">
+        <!--
+      Valoración TEMPORAAAAAAAAL -POR HACER
+    -->
+        <p class="libro-card__rating">
+            ★★★★★ 4.8
+        </p>
+
+        <!--
+      Agrupamos título y autor por se rompe y queda un espacio raro si no lo pones asi
+    -->
+        <div class="libro-card__info">
+            <h2>{{ libro().titulo }}</h2>
+
+            <p class="libro-card__autor">
+                {{ libro().autores || 'Autor no disponible' }}
+            </p>
+        </div>
+
+
+        <p class="libro-card__precio">
+            {{ libro().precio }} €
+        </p>
+    </div>
+</article>
