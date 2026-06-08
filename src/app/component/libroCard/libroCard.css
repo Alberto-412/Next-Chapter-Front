@@ -10,7 +10,7 @@
   border-radius: 0 0 1.5rem 1.5rem;
 
   background-color: var(--color-blanco);
-  box-shadow: 0 12px 30px rgb(31 42 68 / 12%);
+  box-shadow: 0 8px 24px rgba(124, 77, 255, 0.1);
 }
 
 .libro-card__imagen {
@@ -26,7 +26,7 @@
   flex: 1;
   flex-direction: column;
 
-  padding: 1.25rem 1.25rem 0.75rem;
+  padding: 1.25rem 1.25rem 0.35rem;
 }
 
 .libro-card__rating {
