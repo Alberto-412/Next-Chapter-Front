@@ -1,0 +1,26 @@
+<div class="wishlist-container">
+    <h1>Mi Lista de Deseos</h1>
+
+    @if (mensaje) {
+    <p class="mensaje-ok">{{ mensaje }}</p>
+    }
+    @if (error) {
+    <p class="mensaje-error">{{ error }}</p>
+    }
+
+    @if (wishlist.length === 0) {
+    <p>No tienes libros en tu lista de deseos</p>
+    }
+
+    @for (libro of wishlist; track libro.libro_id) {
+    <div>
+        @if (libro.imagen) {
+        <img [src]="libro.imagen" alt="{{ libro.titulo }}" width="80" />
+        }
+        <p><strong>{{ libro.titulo }}</strong></p>
+        <p>{{ libro.precio }} €</p>
+        <button (click)="eliminarDeFavoritos(libro.libro_id)">Eliminar de favoritos</button>
+    </div>
+    }
+
+</div>

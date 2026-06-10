@@ -1,0 +1,186 @@
+<div class="usuarios">
+
+    <div class="page-header">
+        <div>
+            <h1>Gestión de Usuarios</h1>
+            <p>Administra los usuarios registrados en NextChapter</p>
+        </div>
+    </div>
+
+    @if (mensaje()) { <p class="msg-ok">{{ mensaje() }}</p> }
+    @if (error()) { <p class="msg-error">{{ error() }}</p> }
+
+    <!-- LISTADO -->
+    @if (!usuarioSeleccionado()) {
+    <div class="card">
+        <div class="card-header">
+            <h2>Todos los usuarios</h2>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Rol</th>
+                    <th>Activo</th>
+                    <th>Validado</th>
+                    <th>Fecha registro</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (usuario of usuarios(); track usuario.id) {
+                <tr>
+                    <td>
+                        <div class="usuario-cell">
+                            <div class="avatar">{{ usuario.nombre ? usuario.nombre[0] : '?' }}</div>
+                            <div>
+                                <span class="usuario-nombre">{{ usuario.nombre }}</span>
+                                <span class="usuario-mail">{{ usuario.mail }}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="badge" [class]="usuario.rol">{{ usuario.rol }}</span>
+                    </td>
+                    <td>
+                        <span class="badge" [class]="usuario.activo ? 'activo' : 'inactivo'">
+                            {{ usuario.activo ? 'Sí' : 'No' }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge" [class]="usuario.validado ? 'validado' : 'pendiente'">
+                            {{ usuario.validado ? 'Validado' : 'Pendiente' }}
+                        </span>
+                    </td>
+                    <td>{{ usuario.fecha_registro | date:'dd/MM/yyyy' }}</td>
+                    <td>
+                        <div class="acciones">
+                            <button class="btn-icon" (click)="verUsuario(usuario.id)" title="Ver">
+                                <span class="material-symbols-outlined">visibility</span>
+                            </button>
+                            <button class="btn-icon" (click)="editarUsuario(usuario.id)" title="Editar">
+                                <span class="material-symbols-outlined">edit</span>
+                            </button>
+                            @if (!usuario.validado) {
+                            <button class="btn-icon success" (click)="validarUsuario(usuario.id)" title="Validar">
+                                <span class="material-symbols-outlined">check_circle</span>
+                            </button>
+                            }
+                            <button class="btn-icon"
+                                (click)="cambiarRol(usuario.id, usuario.rol === 'admin' ? 'cliente' : 'admin')"
+                                title="{{ usuario.rol === 'admin' ? 'Quitar admin' : 'Hacer admin' }}">
+                                <span class="material-symbols-outlined">manage_accounts</span>
+                            </button>
+                            <button class="btn-icon danger" (click)="darDeBaja(usuario.id)" title="Dar de baja">
+                                <span class="material-symbols-outlined">person_off</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    }
+
+    <!-- DETALLE -->
+    @if (usuarioSeleccionado() && !modoEdicion()) {
+    <div class="card">
+        <div class="card-header">
+            <button class="btn-back" (click)="cerrarDetalle()">← Volver</button>
+            <h2>Detalle del usuario</h2>
+        </div>
+        <div class="detalle-grid">
+            <div class="info-row">
+                <span class="info-label">👤 Nombre</span>
+                <span class="info-value">{{ usuarioSeleccionado().nombre }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">✉️ Email</span>
+                <span class="info-value">{{ usuarioSeleccionado().mail }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">📞 Teléfono</span>
+                <span class="info-value">{{ usuarioSeleccionado().telefono || 'No especificado' }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">📍 Dirección</span>
+                <span class="info-value">{{ usuarioSeleccionado().direccion || 'No especificada' }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">🎭 Rol</span>
+                <span class="info-value">{{ usuarioSeleccionado().rol }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">✅ Activo</span>
+                <span class="info-value">{{ usuarioSeleccionado().activo ? 'Sí' : 'No' }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">🔐 Validado</span>
+                <span class="info-value">{{ usuarioSeleccionado().validado ? 'Sí' : 'No' }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">📅 Fecha registro</span>
+                <span class="info-value">{{ usuarioSeleccionado().fecha_registro | date:'dd/MM/yyyy' }}</span>
+            </div>
+        </div>
+        <div class="detalle-acciones">
+            <button class="btn-primary" (click)="editarUsuario(usuarioSeleccionado().id)">Editar</button>
+            <button class="btn-danger" (click)="darDeBaja(usuarioSeleccionado().id)">Dar de baja</button>
+        </div>
+    </div>
+    }
+
+    <!-- EDICIÓN -->
+    @if (usuarioSeleccionado() && modoEdicion()) {
+    <div class="card">
+        <div class="card-header">
+            <button class="btn-back" (click)="cerrarDetalle()">← Volver</button>
+            <h2>Editar usuario</h2>
+        </div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Nombre</label>
+                <input [ngModel]="usuarioSeleccionado().nombre"
+                    (ngModelChange)="updateUsuarioSeleccionado('nombre', $event)" />
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input [ngModel]="usuarioSeleccionado().mail"
+                    (ngModelChange)="updateUsuarioSeleccionado('mail', $event)" />
+            </div>
+            <div class="form-group">
+                <label>Teléfono</label>
+                <input [ngModel]="usuarioSeleccionado().telefono"
+                    (ngModelChange)="updateUsuarioSeleccionado('telefono', $event)" />
+            </div>
+            <div class="form-group">
+                <label>Dirección</label>
+                <input [ngModel]="usuarioSeleccionado().direccion"
+                    (ngModelChange)="updateUsuarioSeleccionado('direccion', $event)" />
+            </div>
+            <div class="form-group">
+                <label>Rol</label>
+                <select [ngModel]="usuarioSeleccionado().rol"
+                    (ngModelChange)="updateUsuarioSeleccionado('rol', $event)">
+                    <option value="cliente">Cliente</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Activo</label>
+                <select [ngModel]="usuarioSeleccionado().activo"
+                    (ngModelChange)="updateUsuarioSeleccionado('activo', $event)">
+                    <option [value]="1">Sí</option>
+                    <option [value]="0">No</option>
+                </select>
+            </div>
+        </div>
+        <div class="detalle-acciones">
+            <button class="btn-primary" (click)="guardarUsuario()">Guardar</button>
+            <button class="btn-secondary" (click)="cerrarDetalle()">Cancelar</button>
+        </div>
+    </div>
+    }
+
+</div>

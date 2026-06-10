@@ -1,0 +1,252 @@
+<div class="productos">
+
+    <div class="page-header">
+        <div>
+            <h1>Gestión de Productos</h1>
+            <p>Administra el catálogo completo de NextChapter</p>
+        </div>
+        @if (!modoCreacion() && !productoSeleccionado()) {
+        <button class="btn-primary" (click)="mostrarFormularioCreacion()">
+            <span class="material-symbols-outlined">add</span>
+            Nuevo producto
+        </button>
+        }
+    </div>
+
+    @if (mensaje()) { <p class="msg-ok">{{ mensaje() }}</p> }
+    @if (error()) { <p class="msg-error">{{ error() }}</p> }
+
+    <!-- LISTADO -->
+    @if (!productoSeleccionado() && !modoCreacion()) {
+    <div class="card">
+        <div class="card-header">
+            <h2>Todos los productos</h2>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th>Editorial</th>
+                    <th>Categorías</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (producto of productos(); track producto.id) {
+                <tr>
+                    <td>
+                        <div class="producto-cell">
+                            @if (producto.imagen) {
+                            <img [src]="producto.imagen" alt="{{ producto.titulo }}" class="producto-img" />
+                            } @else {
+                            <div class="producto-img-placeholder">
+                                <span class="material-symbols-outlined">book_2</span>
+                            </div>
+                            }
+                            <div>
+                                <span class="producto-titulo">{{ producto.titulo }}</span>
+                                <span class="producto-isbn">ISBN: {{ producto.isbn }}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{ producto.precio }} €</td>
+                    <td [class.stock-bajo]="producto.stock < 5">{{ producto.stock }}</td>
+                    <td>{{ producto.editorial }}</td>
+                    <td>{{ producto.categorias }}</td>
+                    <td>
+                        <div class="acciones">
+                            <button class="btn-icon" (click)="editarProducto(producto.id)" title="Editar">
+                                <span class="material-symbols-outlined">edit</span>
+                            </button>
+                            <button class="btn-icon danger" (click)="eliminarProducto(producto.id)" title="Eliminar">
+                                <span class="material-symbols-outlined">delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    }
+
+    <!-- FORMULARIO CREACIÓN -->
+    @if (modoCreacion()) {
+    <div class="form-grid">
+        <div class="card">
+            <div class="card-header">
+                <button class="btn-back" (click)="cerrar()">← Volver</button>
+                <h2>Añadir nuevo producto</h2>
+            </div>
+            <div class="form-section">
+                <h3>Información General</h3>
+                <div class="form-group">
+                    <label>Título del libro</label>
+                    <input [ngModel]="nuevoProducto().titulo" (ngModelChange)="updateNuevoProducto('titulo', $event)"
+                        placeholder="Ej. Cien años de soledad" />
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>ISBN</label>
+                        <input [ngModel]="nuevoProducto().isbn" (ngModelChange)="updateNuevoProducto('isbn', $event)"
+                            placeholder="978-XXXXXXXXXX" />
+                    </div>
+                    <div class="form-group">
+                        <label>ID Editorial</label>
+                        <input type="number" [ngModel]="nuevoProducto().id_editorial"
+                            (ngModelChange)="updateNuevoProducto('id_editorial', $event)" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Descripción / Sinopsis</label>
+                    <textarea [ngModel]="nuevoProducto().descripcion"
+                        (ngModelChange)="updateNuevoProducto('descripcion', $event)"
+                        placeholder="Escribe una breve sinopsis..."></textarea>
+                </div>
+            </div>
+            <div class="form-section">
+                <h3>Inventario y Precios</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Precio (€)</label>
+                        <input type="number" [ngModel]="nuevoProducto().precio"
+                            (ngModelChange)="updateNuevoProducto('precio', $event)" placeholder="0.00" />
+                    </div>
+                    <div class="form-group">
+                        <label>Stock inicial</label>
+                        <input type="number" [ngModel]="nuevoProducto().stock"
+                            (ngModelChange)="updateNuevoProducto('stock', $event)" placeholder="0" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Fecha publicación</label>
+                        <input type="date" [ngModel]="nuevoProducto().fecha_publicacion"
+                            (ngModelChange)="updateNuevoProducto('fecha_publicacion', $event)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Pre-reserva</label>
+                        <select [ngModel]="nuevoProducto().pre_reserva"
+                            (ngModelChange)="updateNuevoProducto('pre_reserva', $event)">
+                            <option [value]="0">No</option>
+                            <option [value]="1">Sí</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card form-sidebar">
+            <h3>Portada del libro</h3>
+            <div class="imagen-preview">
+                @if (nuevoProducto().imagen) {
+                <img [src]="nuevoProducto().imagen" alt="portada" />
+                } @else {
+                <div class="imagen-placeholder">
+                    <span class="material-symbols-outlined">image</span>
+                    <span>URL de la imagen</span>
+                </div>
+                }
+            </div>
+            <div class="form-group">
+                <label>URL de la imagen</label>
+                <input [ngModel]="nuevoProducto().imagen" (ngModelChange)="updateNuevoProducto('imagen', $event)"
+                    placeholder="https://..." />
+            </div>
+            <button class="btn-primary full" (click)="crearProducto()">Crear producto</button>
+            <button class="btn-secondary full" (click)="cerrar()">Cancelar</button>
+        </div>
+    </div>
+    }
+
+    <!-- FORMULARIO EDICIÓN -->
+    @if (productoSeleccionado() && modoEdicion()) {
+    <div class="form-grid">
+        <div class="card">
+            <div class="card-header">
+                <button class="btn-back" (click)="cerrar()">← Volver</button>
+                <h2>Editar producto</h2>
+            </div>
+            <div class="form-section">
+                <h3>Información Básica</h3>
+                <div class="form-group">
+                    <label>Título del libro</label>
+                    <input [ngModel]="productoSeleccionado().titulo"
+                        (ngModelChange)="updateProductoSeleccionado('titulo', $event)" />
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>ISBN</label>
+                        <input [ngModel]="productoSeleccionado().isbn"
+                            (ngModelChange)="updateProductoSeleccionado('isbn', $event)" />
+                    </div>
+                    <div class="form-group">
+                        <label>ID Editorial</label>
+                        <input type="number" [ngModel]="productoSeleccionado().id_editorial"
+                            (ngModelChange)="updateProductoSeleccionado('id_editorial', $event)" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Descripción / Sinopsis</label>
+                    <textarea [ngModel]="productoSeleccionado().descripcion"
+                        (ngModelChange)="updateProductoSeleccionado('descripcion', $event)"></textarea>
+                </div>
+            </div>
+            <div class="form-section">
+                <h3>Precio, Stock y Categoría</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Precio (€)</label>
+                        <input type="number" [ngModel]="productoSeleccionado().precio"
+                            (ngModelChange)="updateProductoSeleccionado('precio', $event)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Stock</label>
+                        <input type="number" [ngModel]="productoSeleccionado().stock"
+                            (ngModelChange)="updateProductoSeleccionado('stock', $event)" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Fecha publicación</label>
+                        <input type="date" [ngModel]="productoSeleccionado().fecha_publicacion"
+                            (ngModelChange)="updateProductoSeleccionado('fecha_publicacion', $event)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Pre-reserva</label>
+                        <select [ngModel]="productoSeleccionado().pre_reserva"
+                            (ngModelChange)="updateProductoSeleccionado('pre_reserva', $event)">
+                            <option [value]="0">No</option>
+                            <option [value]="1">Sí</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card form-sidebar">
+            <h3>Multimedia</h3>
+            <div class="imagen-preview">
+                @if (productoSeleccionado().imagen) {
+                <img [src]="productoSeleccionado().imagen" alt="portada" />
+                } @else {
+                <div class="imagen-placeholder">
+                    <span class="material-symbols-outlined">image</span>
+                    <span>Sin imagen</span>
+                </div>
+                }
+            </div>
+            <div class="form-group">
+                <label>URL de la imagen</label>
+                <input [ngModel]="productoSeleccionado().imagen"
+                    (ngModelChange)="updateProductoSeleccionado('imagen', $event)" placeholder="https://..." />
+            </div>
+            <button class="btn-primary full" (click)="guardarProducto()">Guardar cambios</button>
+            <button class="btn-secondary full" (click)="cerrar()">Cancelar</button>
+        </div>
+    </div>
+    }
+
+</div>

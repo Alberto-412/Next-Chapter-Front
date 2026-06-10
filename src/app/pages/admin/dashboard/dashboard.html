@@ -1,0 +1,95 @@
+<div class="dashboard">
+    <div class="page-header">
+        <div>
+            <h1>Dashboard</h1>
+            <p>Bienvenido al panel de administración de NextChapter</p>
+        </div>
+    </div>
+
+    @if (error()) {
+    <p class="error">{{ error() }}</p>
+    }
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon purple">📦</div>
+            <div class="stat-info">
+                <span class="stat-label">Pedidos totales</span>
+                <span class="stat-value">{{ totalPedidos() }}</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon green">✅</div>
+            <div class="stat-info">
+                <span class="stat-label">Entregados</span>
+                <span class="stat-value">{{ totalEntregados() }}</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon orange">⏳</div>
+            <div class="stat-info">
+                <span class="stat-label">Pendientes validación</span>
+                <span class="stat-value">{{ usuariosPendientes().length }}</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon red">❌</div>
+            <div class="stat-info">
+                <span class="stat-label">Cancelados</span>
+                <span class="stat-value">{{ totalCancelados() }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-grid">
+        <div class="card">
+            <div class="card-header">
+                <h2>Pedidos recientes</h2>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Cliente</th>
+                        <th>Total</th>
+                        <th>Estado</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (pedido of pedidos().slice(0, 8); track pedido.id) {
+                    <tr>
+                        <td>#{{ pedido.id }}</td>
+                        <td>{{ pedido.cliente }}</td>
+                        <td>{{ pedido.total }} €</td>
+                        <td><span class="badge" [class]="pedido.estado">{{ pedido.estado }}</span></td>
+                        <td>{{ pedido.fecha_pedido | date:'dd/MM/yyyy' }}</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>Validación de usuarios</h2>
+                @if (usuariosPendientes().length > 0) {
+                <span class="badge-count">{{ usuariosPendientes().length }} nuevos</span>
+                }
+            </div>
+            @if (usuariosPendientes().length === 0) {
+            <p class="empty">No hay usuarios pendientes</p>
+            }
+            @for (usuario of usuariosPendientes(); track usuario.id) {
+            <div class="user-row">
+                <div class="user-avatar">{{ usuario.nombre[0] }}</div>
+                <div class="user-info">
+                    <span class="user-name">{{ usuario.nombre }}</span>
+                    <span class="user-mail">{{ usuario.mail }}</span>
+                </div>
+                <button class="btn-aprobar" (click)="validarUsuario(usuario.id)">Aprobar</button>
+            </div>
+            }
+        </div>
+    </div>
+</div>

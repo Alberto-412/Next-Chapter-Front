@@ -1,1 +1,56 @@
-<p>sidebar-admin works!</p>
+<div class="sidebar" [class.open]="menuOpen">
+
+    <!-- LOGO -->
+    <div class="sidebar-logo">
+        <img src="image/0.75x/aalogo_vertical_next_chapter_whiteldpi.png" alt="NextChapter" />
+        <span class="sidebar-subtitle">Panel de administración</span>
+    </div>
+
+    <!-- MENÚ -->
+    <nav class="sidebar-nav">
+        <a routerLink="/admin/dashboard" routerLinkActive="active">
+            <span class="material-symbols-outlined">home</span>
+            <span class="label">Dashboard</span>
+        </a>
+        <a routerLink="/admin/pedidos" routerLinkActive="active">
+            <span class="material-symbols-outlined">shopping_cart</span>
+            <span class="label">Pedidos</span>
+        </a>
+        <a routerLink="/admin/productos" routerLinkActive="active">
+            <span class="material-symbols-outlined">book_2</span>
+            <span class="label">Productos</span>
+        </a>
+        <a routerLink="/admin/usuarios" routerLinkActive="active">
+            <span class="material-symbols-outlined">assignment_ind</span>
+            <span class="label">Usuarios</span>
+        </a>
+    </nav>
+
+    <!-- FOOTER -->
+    <div class="sidebar-footer">
+        <a routerLink="/admin/ajustes">
+            <span class="material-symbols-outlined">settings</span>
+            <span class="label">Ajustes</span>
+        </a>
+        <div class="sidebar-profile">
+            <div class="profile-avatar">A</div>
+            <div class="profile-info">
+                <span class="profile-name">Admin</span>
+                <span class="profile-mail">admin&#64;nextchapter.com</span>
+            </div>
+        </div>
+        <button class="logout-btn" (click)="logout()">
+            <span class="material-symbols-outlined">logout</span>
+            <span class="label">Cerrar sesión</span>
+        </button>
+    </div>
+
+</div>
+
+<!-- OVERLAY MÓVIL -->
+<div class="sidebar-overlay" [class.visible]="menuOpen" (click)="toggleMenu()"></div>
+
+<!-- BOTÓN HAMBURGUESA -->
+<button class="hamburger" (click)="toggleMenu()">
+    <span class="material-symbols-outlined">menu</span>
+</button>
