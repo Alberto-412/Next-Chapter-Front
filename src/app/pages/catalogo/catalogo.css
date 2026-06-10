@@ -1,0 +1,124 @@
+/**
+ * Bootstrap controla:
+ * - Filas
+ * - Columnas
+ * - Responsive
+ *
+ * Este CSS controla:
+ * - Colores
+ * - Espaciados
+ * - Tarjetas
+ * - Tipografía visual
+ */
+
+.catalogo {
+  min-height: 100vh;
+  padding: 2rem;
+
+  background-color: var(--color-crema);
+  color: var(--color-azul);
+
+  /*BOOOOTSTRAP
+    Ya no usamos grid aquí porque Bootstrap
+    se encarga de la estructura responsive
+    con .container-fluid, .row y .col-*.
+  */
+  /* display: grid; */
+  /* grid-template-columns: 260px 1fr; */
+  /* gap: 2rem; */
+}
+
+.catalogo__sidebar {
+  border-right: 1px solid var(--color-gris-claro);
+  padding-right: 1.5rem;
+}
+
+.catalogo__contenido {
+  min-width: 0;
+}
+
+.catalogo__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+
+  margin-bottom: 2rem;
+}
+
+.catalogo__ruta {
+  color: var(--color-gris-medio);
+  font-size: 0.85rem;
+}
+
+.catalogo__header h1 {
+  margin: 0.5rem 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.catalogo__orden {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  font-weight: 600;
+}
+
+.catalogo__orden select {
+  border: 1px solid var(--color-gris-claro);
+  border-radius: 0.9rem;
+  padding: 0.8rem 1rem;
+
+  background-color: var(--color-blanco);
+  color: var(--color-azul);
+
+  font-family: inherit;
+  font-weight: 700;
+}
+
+/*BOOOOTSTRAP
+  Ya no necesitamos .catalogo__grid porque el grid
+  de libros lo hace Bootstrap con .row y .col-*.
+*/
+/*
+.catalogo__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 2rem;
+}
+*/
+
+.catalogo__contenido .row > div {
+  display: flex;
+}
+
+.estado {
+  padding: 1rem;
+  border-radius: 1rem;
+
+  background-color: var(--color-blanco);
+
+  font-weight: 700;
+}
+
+.estado--error {
+  color: var(--color-rosa);
+}
+
+/*BOOOOTSTRAAAAAAAAAAAAAAAAAAAAAAAAAAAP
+
+
+/**
+ * En móvil quitamos la línea lateral
+ * y añadimos una línea inferior.
+ */
+@media (max-width: 991px) {
+  .catalogo__sidebar {
+    border-right: none;
+    border-bottom: 1px solid var(--color-gris-claro);
+
+    padding-right: 0;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+  }
+}

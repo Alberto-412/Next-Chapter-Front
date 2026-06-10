@@ -16,8 +16,10 @@ import { Reviews } from './pages/usuario/reviews/reviews';
 // Login
 import { Login } from './pages/login/login';
 
-export const routes: Routes = [
+//catalogo
+import { Catalogo } from './pages/catalogo/catalogo';
 
+export const routes: Routes = [
   // Rutas públicas
   { path: 'login', component: Login },
 
@@ -31,7 +33,7 @@ export const routes: Routes = [
       { path: 'productos', component: Productos },
       { path: 'pedidos', component: Pedidos },
       { path: 'usuarios', component: Usuarios },
-    ]
+    ],
   },
 
   // Rutas usuario
@@ -39,7 +41,8 @@ export const routes: Routes = [
   { path: 'wishlist', component: Wishlist, canActivate: [authGuard] },
   { path: 'reviews', component: Reviews, canActivate: [authGuard] },
 
-  // Ruta por defecto
-  { path: '', redirectTo: 'login', pathMatch: 'full' }
-
+  // Ruta por defecto TEMPORAL XXXXXXXXXXXXXX
+  { path: 'XXXXXXXXXXX', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', component: Catalogo },
+  { path: 'catalogo', component: Catalogo },
 ];
