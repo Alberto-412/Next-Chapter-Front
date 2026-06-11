@@ -2,7 +2,7 @@
  * FiltroLibros
  *
  * Chicos esta interfaz representa los filtros que podemos enviar
- * desde Angular al backend cuando queremos buscar libros.
+ * desde Angular al back cuando queremos buscar libros.
  *
  * Ejemplos de uso:
  * - Buscar por texto: ?busqueda=harry

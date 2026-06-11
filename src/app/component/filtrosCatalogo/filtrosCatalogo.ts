@@ -11,7 +11,7 @@ import { CategoriasService } from '../../core/services/categorias';
 })
 export class FiltrosCatalogo {
   /**
-   * Servicio que conecta este componente con el backend
+   * Servicio que conecta este componente con el back
    * para obtener las categorías desde MySQL.
    */
   private readonly categoriasService = inject(CategoriasService);
@@ -39,7 +39,7 @@ export class FiltrosCatalogo {
   precioMax = signal<number | null>(null);
 
   /**
-   * Categorías recibidas desde el backend.
+   * Categorías recibidas desde el back.
    *
    * Empieza vacío y se llena cuando carga el componente.
    */
@@ -56,7 +56,7 @@ export class FiltrosCatalogo {
   errorCategorias = signal('');
 
   /**
-   * Al cargar el componente, pedimos las categorías al backend.
+   * Al cargar el componente, pedimos las categorías al back.
    */
   async ngOnInit() {
     await this.cargarCategorias();
