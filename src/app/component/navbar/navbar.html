@@ -1,6 +1,6 @@
 <header class="navbar">
   <a routerLink="/" class="logo">
-  <img src="nextchapter_logo_w_slogan_next_chapter.png" alt="Next Chapter" class="logo-img" />
+  <img src="aalogo_vertical_next_chapter_whiteldpi.png" alt="Next Chapter" class="logo-img" />
 </a>
   <div class="buscador">
     <span class="material-symbols-outlined">search</span>
@@ -13,24 +13,24 @@
   </nav>
 
   <div class="iconos">
-    <a routerLink="/favoritos" class="icono">
-      <span class="material-symbols-outlined">favorite</span>
-      <span class="icono-texto">Favoritos</span>
-    </a>
+  <a routerLink="/favoritos" class="icono icono-favoritos">
+    <span class="material-symbols-outlined">favorite</span>
+    <span class="icono-texto">Favoritos</span>
+  </a>
 
-    <a routerLink="/cuenta" class="icono">
-      <span class="material-symbols-outlined">person</span>
-      <span class="icono-texto">Mi cuenta</span>
-    </a>
+  <a routerLink="/cuenta" class="icono icono-cuenta">
+    <span class="material-symbols-outlined">person</span>
+    <span class="icono-texto">Mi cuenta</span>
+  </a>
 
-    <button class="icono icono-carrito" (click)="toggleDrawer()">
-      <span class="material-symbols-outlined">shopping_cart</span>
-      @if (cartCount() > 0) {
-        <span class="badge">{{ cartCount() }}</span>
-      }
-      <span class="icono-texto">Carrito</span>
-    </button>
-  </div>
+  <button class="icono icono-carrito" (click)="toggleDrawer()">
+    <span class="material-symbols-outlined">shopping_cart</span>
+    @if (cartCount() > 0) {
+      <span class="badge">{{ cartCount() }}</span>
+    }
+    <span class="icono-texto">Carrito</span>
+  </button>
+</div>
 </header>
 
 <!-- CAJÓN LATERAL DEL CARRITO -->
