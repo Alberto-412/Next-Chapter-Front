@@ -18,6 +18,7 @@ import { Login } from './pages/login/login';
 
 //catalogo
 import { Catalogo } from './pages/catalogo/catalogo';
+import { LibroDetalle } from './pages/libroDetalle/libroDetalle';
 
 export const routes: Routes = [
   // Rutas públicas
@@ -43,6 +44,9 @@ export const routes: Routes = [
 
   // Ruta por defecto TEMPORAL XXXXXXXXXXXXXX
   { path: 'XXXXXXXXXXX', redirectTo: 'login', pathMatch: 'full' },
+
+  //Catalogo
   { path: '', component: Catalogo },
   { path: 'catalogo', component: Catalogo },
+  { path: 'libros/:id', component: LibroDetalle },
 ];

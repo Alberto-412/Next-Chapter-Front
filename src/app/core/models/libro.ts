@@ -8,13 +8,20 @@ export interface Libro {
   pre_reserva: number;
   imagen: string;
   fecha_publicacion: string;
+
   editorial: string;
-  categorias: string | null;
-  autores: string | null;
+
+  id_editorial?: number;
+
+  categorias?: string | null;
+  autores?: string | null;
+
+  rating?: string | null;
+  total_resenas?: number;
 }
 
 /**
- * Respuesta del backend al pedir libros.
+ * Respuesta del back al pedir libros.
  *
  * Nuestro endpoint GET /api/libros devuelve:
  * {
@@ -25,4 +32,14 @@ export interface Libro {
 export interface LibrosResponse {
   mensaje: string;
   data: Libro[];
+}
+
+/**
+ * Respuesta del endpoint:
+ *
+ * GET /api/libros/:id
+ */
+export interface LibroResponse {
+  mensaje: string;
+  data: Libro;
 }

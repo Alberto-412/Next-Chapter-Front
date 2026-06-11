@@ -69,3 +69,43 @@
   font-size: 1.2rem;
   font-weight: 800;
 }
+
+/* Enlace de la imagen */
+.libro-card__imagen-link {
+  display: block;
+  text-decoration: none;
+}
+
+/* Para que la imagen parezca clicable */
+.libro-card__imagen-link:hover .libro-card__imagen {
+  opacity: 0.9;
+}
+
+/* Enlace del título */
+.libro-card__titulo-link {
+  color: var(--color-azul);
+  text-decoration: none;
+}
+
+/* Hover del título */
+.libro-card__titulo-link:hover {
+  color: var(--color-morado);
+}
+
+.libro-card__rating {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.libro-card__estrellas {
+  color: var(--color-amarillo);
+}
+
+.libro-card__rating-numero,
+.libro-card__rating-total {
+  color: var(--color-gris-medio);
+}
