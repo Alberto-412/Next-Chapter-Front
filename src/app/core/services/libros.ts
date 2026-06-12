@@ -2,8 +2,9 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 
-import { LibrosResponse } from '../models/libro';
+import { LibrosResponse, LibroResponse } from '../models/libro';
 import { FiltroLibros } from '../models/filtro_libros';
+import { environment } from '../../environment';
 
 @Injectable({
   providedIn: 'root',
@@ -13,24 +14,24 @@ export class LibrosService {
    * Inyectamos HttpClient usando inject().
    *
    * HttpClient es la herramienta de Angular que nos permite
-   * hacer peticiones HTTP al backend: GET, POST, PUT, DELETE.
+   * hacer peticiones HTTP al back: GET, POST, PUT, DELETE.
    */
   private readonly httpClient = inject(HttpClient);
 
   /**
-   * URL base del endpoint de libros en nuestro backend.
+   * URL base del endpoint de libros en nuestro back.
    *
    * Aquí apuntamos a Node/Express.
    * EL PUERTO IGUAL QUE EN NODE
    */
 
-  //apiUrl CAMBIAR PENDIENTEEEEEEE
-  private readonly baseUrl = 'http://localhost:10200/api/libros';
+  //apiUrl
+  private readonly baseUrl = `${environment.apiUrl}/libros`;
 
   /**
    * getAll(filtros)
    *
-   * Este método sirve para pedir al backend la lista de libros.
+   * Este método sirve para pedir al back la lista de libros.
    *
    * Puede traer:
    * - Todos los libros.
@@ -67,7 +68,7 @@ export class LibrosService {
     }
 
     /**
-     * Hacemos la petición GET al backend.
+     * Hacemos la petición GET al back.
      *
      * firstValueFrom convierte el Observable de Angular
      * en una Promise para poder usar async/await,
@@ -78,5 +79,14 @@ export class LibrosService {
         params,
       }),
     );
+  }
+
+  /**
+   * Obtiene un libro concreto por su id.
+   * Endpoint:
+   * GET /api/libros/:id
+   */
+  getById(id: number) {
+    return firstValueFrom(this.httpClient.get<LibroResponse>(`${this.baseUrl}/${id}`));
   }
 }

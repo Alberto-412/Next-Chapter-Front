@@ -1,1 +1,76 @@
-<p>navbar works!</p>
+<header class="navbar">
+  <a routerLink="/" class="logo">
+  <img src="aalogo_vertical_next_chapter_whiteldpi.png" alt="Next Chapter" class="logo-img" />
+</a>
+  <div class="buscador">
+    <span class="material-symbols-outlined">search</span>
+    <input type="text" placeholder="Buscar libros, manga, cómics y más..." />
+  </div>
+
+  <nav class="enlaces">
+    <a routerLink="/categorias">Categorías</a>
+    <a routerLink="/novedades">Novedades</a>
+  </nav>
+
+  <div class="iconos">
+  <a routerLink="/favoritos" class="icono icono-favoritos">
+    <span class="material-symbols-outlined">favorite</span>
+    <span class="icono-texto">Favoritos</span>
+  </a>
+
+  <a routerLink="/cuenta" class="icono icono-cuenta">
+    <span class="material-symbols-outlined">person</span>
+    <span class="icono-texto">Mi cuenta</span>
+  </a>
+
+  <button class="icono icono-carrito" (click)="toggleDrawer()">
+    <span class="material-symbols-outlined">shopping_cart</span>
+    @if (cartCount() > 0) {
+      <span class="badge">{{ cartCount() }}</span>
+    }
+    <span class="icono-texto">Carrito</span>
+  </button>
+</div>
+</header>
+
+<!-- CAJÓN LATERAL DEL CARRITO -->
+@if (drawerAbierto()) {
+  <div class="drawer-fondo" (click)="cerrarDrawer()"></div>
+
+  <aside class="drawer">
+    <div class="drawer-cabecera">
+      <h2>Tu Carrito</h2>
+      <button class="drawer-cerrar" (click)="cerrarDrawer()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+
+    @if (items().length === 0) {
+      <p class="drawer-vacio">Tu carrito está vacío.</p>
+    } @else {
+      <div class="drawer-lista">
+        @for (item of items(); track item.id_producto) {
+          <div class="drawer-item">
+            <img [src]="item.imagen" [alt]="item.titulo" />
+            <div class="drawer-item-info">
+              <p class="drawer-titulo">{{ item.titulo }}</p>
+              <p class="drawer-detalle">{{ item.cantidad }} x {{ item.precio }} €</p>
+            </div>
+            <button class="drawer-eliminar" (click)="eliminar(item.id_producto)">
+              <span class="material-symbols-outlined">delete</span>
+            </button>
+          </div>
+        }
+      </div>
+
+      <div class="drawer-pie">
+        <div class="drawer-total">
+          <span>Total:</span>
+          <strong>{{ total() }} €</strong>
+        </div>
+        <a routerLink="/cart" class="drawer-btn-ver" (click)="cerrarDrawer()">Ver carrito</a>
+        <a routerLink="/checkout" class="drawer-btn-finalizar" (click)="cerrarDrawer()">Finalizar compra</a>
+      </div>
+    }
+  </aside>
+}

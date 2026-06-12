@@ -21,10 +21,12 @@
                             Mostrando {{ libros().length }} productos
                         </p>
                     </div>
-
+                    <!--
+    Cuando cambia el select, ejecutamos ordenarLibros().
+  -->
                     <label class="catalogo__orden">
                         Ordenar por:
-                        <select>
+                        <select (change)="ordenarLibros($event)">
                             <option value="novedades">Novedades</option>
                             <option value="precio-menor">Precio menor</option>
                             <option value="precio-mayor">Precio mayor</option>
