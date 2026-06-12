@@ -21,6 +21,10 @@ export class Usuarios implements OnInit {
   mensaje = signal('');
   error = signal('');
 
+  // ============ PAGINACIÓN ============
+  paginaActual = signal(1);
+  itemsPorPagina = 7;
+
   usuariosFiltrados = computed(() => {
     const termino = this.busquedaService.termino();
     if (!termino) return this.usuarios();
@@ -30,15 +34,53 @@ export class Usuarios implements OnInit {
     );
   });
 
+  // ============ PAGINACIÓN COMPUTED ============
+  usuariosEnPagina = computed(() => {
+    const usuarios = this.usuariosFiltrados();
+    const inicio = (this.paginaActual() - 1) * this.itemsPorPagina;
+    const fin = inicio + this.itemsPorPagina;
+    return usuarios.slice(inicio, fin);
+  });
+
+  totalPaginas = computed(() => {
+    return Math.ceil(this.usuariosFiltrados().length / this.itemsPorPagina);
+  });
+
+  // Crear array de números para la paginación
+  paginasArray = computed(() => {
+    return Array.from({ length: this.totalPaginas() }, (_, i) => i + 1);
+  });
+
   ngOnInit() {
     this.cargarUsuarios();
   }
 
   cargarUsuarios() {
     this.adminService.getUsuarios().subscribe({
-      next: (data: any) => this.usuarios.set(data),
+      next: (data: any) => {
+        this.usuarios.set(data);
+        this.paginaActual.set(1); // Resetear a página 1 al cargar
+      },
       error: () => this.error.set('Error al cargar los usuarios')
     });
+  }
+
+  irAPagina(pagina: number) {
+    if (pagina >= 1 && pagina <= this.totalPaginas()) {
+      this.paginaActual.set(pagina);
+    }
+  }
+
+  paginaAnterior() {
+    if (this.paginaActual() > 1) {
+      this.paginaActual.update(p => p - 1);
+    }
+  }
+
+  paginaSiguiente() {
+    if (this.paginaActual() < this.totalPaginas()) {
+      this.paginaActual.update(p => p + 1);
+    }
   }
 
   verUsuario(userId: number) {

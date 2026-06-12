@@ -13,7 +13,7 @@
 .page-header h1 {
   font-size: 1.6rem;
   font-weight: 700;
-  color: var(--midnight-express);
+  color: var(--color-azul);
 }
 
 .page-header p {
@@ -39,7 +39,7 @@
 .card-header h2 {
   font-size: 1rem;
   font-weight: 600;
-  color: var(--midnight-express);
+  color: var(--color-azul);
 }
 
 table {
@@ -64,7 +64,7 @@ th {
 
 td {
   padding: 14px 12px;
-  color: var(--midnight-express);
+  color: var(--color-azul);
   border-bottom: 1px solid #f9fafb;
   vertical-align: middle;
 }
@@ -103,7 +103,7 @@ tr:last-child td {
   display: block;
   font-weight: 600;
   font-size: 0.85rem;
-  color: var(--midnight-express);
+  color: var(--color-azul);
 }
 
 .producto-isbn {
@@ -113,7 +113,7 @@ tr:last-child td {
 }
 
 .stock-bajo {
-  color: var(--scarlet-red);
+  color: var(--color-rosa);
   font-weight: 700;
 }
 
@@ -132,7 +132,7 @@ tr:last-child td {
   align-items: center;
   justify-content: center;
   background: rgba(124, 77, 255, 0.08);
-  color: var(--medium-slate-blue);
+  color: var(--color-morado);
   transition: background 0.2s;
 }
 
@@ -142,7 +142,7 @@ tr:last-child td {
 
 .btn-icon.danger {
   background: rgba(255, 77, 109, 0.08);
-  color: var(--scarlet-red);
+  color: var(--color-rosa);
 }
 
 .btn-icon.danger:hover {
@@ -157,7 +157,7 @@ tr:last-child td {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: var(--medium-slate-blue);
+  background: var(--color-morado);
   color: #ffffff;
   border: none;
   border-radius: 10px;
@@ -186,7 +186,7 @@ tr:last-child td {
   justify-content: center;
   gap: 8px;
   background: #f3f4f6;
-  color: var(--midnight-express);
+  color: var(--color-azul);
   border: none;
   border-radius: 10px;
   padding: 10px 20px;
@@ -204,7 +204,7 @@ tr:last-child td {
 .btn-back {
   background: none;
   border: none;
-  color: var(--medium-slate-blue);
+  color: var(--color-morado);
   font-family: 'Montserrat', sans-serif;
   font-size: 0.88rem;
   font-weight: 600;
@@ -230,7 +230,7 @@ tr:last-child td {
 .form-sidebar h3 {
   font-size: 0.95rem;
   font-weight: 600;
-  color: var(--midnight-express);
+  color: var(--color-azul);
   margin-bottom: 8px;
 }
 
@@ -241,7 +241,7 @@ tr:last-child td {
 .form-section h3 {
   font-size: 0.95rem;
   font-weight: 600;
-  color: var(--midnight-express);
+  color: var(--color-azul);
   margin-bottom: 16px;
   padding-bottom: 8px;
   border-bottom: 1px solid #f3f4f6;
@@ -268,7 +268,7 @@ tr:last-child td {
   border-radius: 8px;
   font-family: 'Montserrat', sans-serif;
   font-size: 0.88rem;
-  color: var(--midnight-express);
+  color: var(--color-azul);
   outline: none;
   transition: border 0.2s;
 }
@@ -276,7 +276,7 @@ tr:last-child td {
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
-  border-color: var(--medium-slate-blue);
+  border-color: var(--color-morado);
 }
 
 .form-group textarea {
@@ -326,8 +326,82 @@ tr:last-child td {
   font-size: 0.88rem;
 }
 .msg-error {
-  color: var(--scarlet-red);
+  color: var(--color-rosa);
   font-size: 0.88rem;
+}
+
+/* ============ PAGINACIÓN ============ */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 16px;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.pagination-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  color: #1f2a44;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+  font-family: 'Montserrat', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  border-color: #7c4dff;
+  color: #7c4dff;
+  background: rgba(124, 77, 255, 0.08);
+}
+
+.pagination-btn.active {
+  background: #7c4dff;
+  color: #ffffff;
+  border-color: #7c4dff;
+  box-shadow: 0 2px 6px rgba(124, 77, 255, 0.2);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination-info {
+  color: #6b7280;
+  font-size: 0.8rem;
+  margin-left: 12px;
+  font-weight: 600;
+  font-family: 'Montserrat', sans-serif;
+}
+
+@media (max-width: 768px) {
+  .pagination-controls {
+    gap: 4px;
+    padding: 10px;
+    margin-top: 12px;
+  }
+
+  .pagination-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 0.75rem;
+  }
+
+  .pagination-info {
+    font-size: 0.7rem;
+    margin-left: 8px;
+  }
 }
 
 @media (max-width: 1024px) {
@@ -418,7 +492,7 @@ tr:last-child td {
     border-radius: 6px;
     padding: 3px 8px;
     font-size: 0.8rem;
-    color: var(--midnight-express);
+    color: var(--color-azul);
     font-weight: 500;
   }
 

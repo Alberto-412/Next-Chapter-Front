@@ -13,7 +13,7 @@
 .page-header h1 {
   font-size: 1.6rem;
   font-weight: 700;
-  color: var(--midnight-express);
+  color: var(--color-azul);
 }
 
 .page-header p {
@@ -40,7 +40,7 @@
 .card-header h2 {
   font-size: 1rem;
   font-weight: 600;
-  color: var(--midnight-express);
+  color: var(--color-azul);
 }
 
 .filtros select {
@@ -49,7 +49,7 @@
   border-radius: 8px;
   font-family: 'Montserrat', sans-serif;
   font-size: 0.85rem;
-  color: var(--midnight-express);
+  color: var(--color-azul);
   outline: none;
   cursor: pointer;
 }
@@ -76,7 +76,7 @@ th {
 
 td {
   padding: 14px 12px;
-  color: var(--midnight-express);
+  color: var(--color-azul);
   border-bottom: 1px solid #f9fafb;
 }
 
@@ -110,7 +110,7 @@ tr:last-child td {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: var(--medium-slate-blue);
+  background: var(--color-morado);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -171,7 +171,7 @@ tr:last-child td {
 
 .btn-ver {
   background: rgba(124, 77, 255, 0.1);
-  color: var(--medium-slate-blue);
+  color: var(--color-morado);
   border: none;
   border-radius: 8px;
   padding: 6px 12px;
@@ -193,7 +193,7 @@ tr:last-child td {
   border-radius: 8px;
   font-family: 'Montserrat', sans-serif;
   font-size: 0.8rem;
-  color: var(--midnight-express);
+  color: var(--color-azul);
   outline: none;
   cursor: pointer;
 }
@@ -201,7 +201,7 @@ tr:last-child td {
 .btn-back {
   background: none;
   border: none;
-  color: var(--medium-slate-blue);
+  color: var(--color-morado);
   font-family: 'Montserrat', sans-serif;
   font-size: 0.88rem;
   font-weight: 600;
@@ -225,7 +225,7 @@ tr:last-child td {
 .detalle-sidebar h3 {
   font-size: 0.95rem;
   font-weight: 600;
-  color: var(--midnight-express);
+  color: var(--color-azul);
   margin-bottom: 12px;
 }
 
@@ -259,7 +259,7 @@ tr:last-child td {
 
 .total-valor {
   font-size: 1.1rem;
-  color: var(--midnight-express);
+  color: var(--color-azul);
 }
 
 .info-row {
@@ -284,7 +284,7 @@ tr:last-child td {
 
 .info-value {
   font-size: 0.88rem;
-  color: var(--midnight-express);
+  color: var(--color-azul);
   font-weight: 600;
 }
 
@@ -293,7 +293,7 @@ tr:last-child td {
   font-size: 0.88rem;
 }
 .msg-error {
-  color: var(--scarlet-red);
+  color: var(--color-rosa);
   font-size: 0.88rem;
 }
 
@@ -366,7 +366,7 @@ tr:last-child td {
     border-radius: 6px;
     padding: 4px 10px;
     font-size: 0.8rem;
-    color: var(--midnight-express);
+    color: var(--color-azul);
     font-weight: 500;
   }
 

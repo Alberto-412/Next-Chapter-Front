@@ -13,7 +13,7 @@
 
     <!-- STATS -->
     @if (stats()) {
-    <div class="stats-grid">
+    <div class="stats-grid" [class.hide-on-search]="busquedaService.termino() !== ''">
         <div class="stat-card">
             <div class="stat-icon purple">
                 <span class="material-symbols-outlined">shopping_bag</span>
@@ -99,9 +99,8 @@
                     <td><span class="badge" [class]="pedido.estado">{{ pedido.estado }}</span></td>
                     <td>{{ pedido.total }} €</td>
                     <td>
-                        <button class="btn-actualizar" (click)="verPedido(pedido)">
-                            <span class="btn-texto">Ver detalle</span>
-                            <span class="material-symbols-outlined">chevron_right</span>
+                        <button class="btn-ver-pedido" (click)="verPedido(pedido)" title="Ver detalle">
+                            <span class="material-symbols-outlined">visibility</span>
                         </button>
                     </td>
                 </tr>

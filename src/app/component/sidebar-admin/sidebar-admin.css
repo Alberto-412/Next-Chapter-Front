@@ -131,7 +131,7 @@
 @media (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%);
-    background-color: var(--midnight-express);
+    background-color: var(--color-azul);
   }
 
   .sidebar.open {

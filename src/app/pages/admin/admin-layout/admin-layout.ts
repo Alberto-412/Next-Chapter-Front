@@ -21,7 +21,7 @@ export class AdminLayout {
   }
 
   get searchPlaceholder(): string {
-    return this.isMobile ? 'Buscar' : 'Buscar pedidos, clientes...';
+    return this.isMobile ? 'Buscar' : 'Buscar ...';
   }
 
   onMenuToggled(isOpen: boolean) {
