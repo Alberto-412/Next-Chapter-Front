@@ -111,10 +111,11 @@
                     {{ libro.precio }} €
                 </span>
 
-                <button type="button" class="btn libro-detalle__btn">
-                    Añadir al carrito
+                <button
+                  type="button" class="btn libro-detalle__btn"
+  [disabled]="libro.stock <= 0" (click)="agregarAlCarrito(libro.id)">
+    Añadir al carrito
                 </button>
-
             </div>
 
         </div>
