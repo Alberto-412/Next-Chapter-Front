@@ -7,10 +7,11 @@ import { FiltroLibros } from '../../core/models/filtro_libros';
 import { FiltrosCatalogo } from '../../component/filtrosCatalogo/filtrosCatalogo';
 import { LibroCard } from '../../component/libroCard/libroCard';
 import { Newsletter } from '../../component/newsletter/newsletter';
+import { Footer } from '../../component/footer/footer';
 
 @Component({
   selector: 'app-catalogo',
-  imports: [FiltrosCatalogo, LibroCard, Newsletter],
+  imports: [FiltrosCatalogo, LibroCard, Newsletter, Footer],
   templateUrl: './catalogo.html',
   styleUrl: './catalogo.css',
 })

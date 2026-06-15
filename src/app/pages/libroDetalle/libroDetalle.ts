@@ -8,12 +8,13 @@ import { LibrosService } from '../../core/services/libros';
 import { Resena } from '../../core/models/resena';
 import { ResenasService } from '../../core/services/resenas';
 import { ResenasLibro } from '../../component/resenasLibro/resenasLibro';
+import { Footer } from '../../component/footer/footer';
 
 @Component({
   selector: 'app-libro-detalle',
   templateUrl: './libroDetalle.html',
   styleUrl: './libroDetalle.css',
-  imports: [DatePipe, RouterLink, ResenasLibro],
+  imports: [DatePipe, RouterLink, ResenasLibro, Footer],
 })
 export class LibroDetalle {
   /**
