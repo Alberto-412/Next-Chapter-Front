@@ -59,12 +59,12 @@
 
 .sidebar-nav a:hover {
   background-color: rgba(255, 255, 255, 0.07);
-  color: #ffffff;
+  color: var(--color-blanco);
 }
 
 .sidebar-nav a.active {
   background-color: var(--color-morado);
-  color: #ffffff;
+  color: var(--color-blanco);
 }
 
 .material-symbols-outlined {
@@ -95,7 +95,7 @@
 
 .sidebar-footer a:hover {
   background-color: rgba(255, 255, 255, 0.07);
-  color: #ffffff;
+  color: var(--color-blanco);
 }
 
 .logout-btn {
