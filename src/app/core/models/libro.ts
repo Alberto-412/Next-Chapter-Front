@@ -32,6 +32,22 @@ export interface Libro {
 export interface LibrosResponse {
   mensaje: string;
   data: Libro[];
+
+  /**
+   * Información de paginación que devuelve el back.
+   *
+   * Esto nos sirve para saber:
+   * - cuántos libros hay en total
+   * - en qué página estamos
+   * - cuántos libros mostramos por página
+   * - cuántas páginas existen
+   */
+  paginacion: {
+    total: number;
+    pagina: number;
+    limite: number;
+    totalPaginas: number;
+  };
 }
 
 /**

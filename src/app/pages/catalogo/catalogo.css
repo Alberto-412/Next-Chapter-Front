@@ -122,3 +122,60 @@
     margin-bottom: 1rem;
   }
 }
+
+/**
+ * PAGINACIÓN
+ */
+
+.catalogo__paginacion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: 1.25rem;
+
+  margin-top: 4rem;
+}
+
+.catalogo__pagina,
+.catalogo__pagina-nav {
+  border: none;
+  background: transparent;
+
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+
+  color: var(--color-gris-medio);
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+/**
+ * Efecto hover.
+ */
+.catalogo__pagina:hover,
+.catalogo__pagina-nav:hover {
+  color: var(--color-morado);
+}
+
+/**
+ * Página activa.
+ *
+ * Solo cambia el color.
+ * Nada de círculos ni botones.
+ */
+.catalogo__pagina--activa {
+  color: var(--color-morado);
+  font-weight: 800;
+}
+
+/**
+ * Flechas desactivadas.
+ */
+.catalogo__pagina-nav:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
