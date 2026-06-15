@@ -1,10 +1,23 @@
+<!--
+  ============================================================
+  QUÉ HACE: HTML del sidebar de navegación del admin.
+  ============================================================
+-->
+
+<!-- [class.open] → binding de clase: Angular añade 'open' cuando
+     menuOpen es true. El CSS lo usa para mostrar el sidebar en móvil. -->
 <div class="sidebar" [class.open]="menuOpen">
 
+    <!-- Logo del panel admin -->
     <div class="sidebar-logo">
         <img src="image/nextchapter_logo_vertical_next_chapter_white.png" alt="NextChapter" />
         <span class="sidebar-subtitle">Panel de administración</span>
     </div>
 
+    <!-- Navegación principal
+         routerLink       → navega a la ruta sin recargar la página.
+         routerLinkActive → añade la clase 'active' cuando estamos en esa ruta,
+                            lo que el CSS usa para resaltar el enlace actual. -->
     <nav class="sidebar-nav">
         <a routerLink="/admin/dashboard" routerLinkActive="active">
             <span class="material-symbols-outlined">home</span>
@@ -25,6 +38,7 @@
     </nav>
 
     <div class="sidebar-footer">
+        <!-- $event.preventDefault() evita que el href="#" haga scroll al top -->
         <a href="#" (click)="$event.preventDefault()">
             <span class="material-symbols-outlined">help</span>
             <span class="label">Ayuda</span>
@@ -34,13 +48,10 @@
             <span class="label">Cerrar sesión</span>
         </button>
     </div>
-
 </div>
 
-<!-- OVERLAY MÓVIL -->
+<!-- OVERLAY MÓVIL: fondo oscuro semitransparente que aparece
+     sobre el contenido cuando el sidebar está abierto en móvil.
+     Al hacer click en él, cierra el sidebar (misma lógica que
+     el botón hamburguesa). [class.visible] lo hace aparecer/desaparecer. -->
 <div class="sidebar-overlay" [class.visible]="menuOpen" (click)="toggleMenu()"></div>
-
-<!-- BOTÓN HAMBURGUESA -->
-<button class="hamburger" (click)="toggleMenu()">
-    <span class="material-symbols-outlined">menu</span>
-</button>

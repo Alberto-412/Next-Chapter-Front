@@ -18,6 +18,11 @@ body {
   min-height: 100vh;
 }
 
+/* Oculta la barra de navegación (navbar) en las páginas del panel de administración */
+body:has(.admin-layout) .navbar {
+  display: none;
+}
+
 /**
  * ======================================
  * NEXTCHAPTER - VARIABLES GLOBALES

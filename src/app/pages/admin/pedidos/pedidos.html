@@ -1,3 +1,10 @@
+<!--
+  ============================================================
+  QUÉ HACE: Vista de gestión de pedidos. Alterna entre:
+            · Lista de pedidos (tabla desktop + tarjetas móvil)
+            · Detalle de un pedido concreto
+  ============================================================
+-->
 <div class="pedidos">
 
     <div class="page-header">
@@ -10,11 +17,17 @@
     @if (mensaje()) { <p class="msg-ok">{{ mensaje() }}</p> }
     @if (error()) { <p class="msg-error">{{ error() }}</p> }
 
+    <!-- ── VISTA: LISTA ────────────────────────────────────
+         Visible cuando NO hay pedido seleccionado.
+    ─────────────────────────────────────────────────────── -->
     @if (!pedidoSeleccionado()) {
     <div class="card">
         <div class="card-header">
             <h2>Todos los pedidos</h2>
             <div class="filtros">
+                <!-- Filtro por estado: al cambiar llama a filtrarEstado().
+                       $any($event.target).value → castea el EventTarget a
+                       HTMLSelectElement para acceder al .value sin error de TypeScript. -->
                 <select (change)="filtrarEstado($any($event.target).value)">
                     <option value="">Todos los estados</option>
                     @for (estado of estadosValidos; track estado) {
@@ -24,7 +37,7 @@
             </div>
         </div>
 
-        <!-- Tabla desktop -->
+        <!-- TABLA DESKTOP (oculta en móvil con CSS) -->
         <table class="tabla-desktop">
             <thead>
                 <tr>
@@ -53,6 +66,7 @@
                     <td><span class="badge" [class]="pedido.estado">{{ pedido.estado }}</span></td>
                     <td>{{ pedido.total }} €</td>
                     <td>
+                        <!-- verPedido() llama al back con el ID para obtener el detalle completo -->
                         <button class="btn-ver" (click)="verPedido(pedido.id)">👁 Ver</button>
                     </td>
                 </tr>
@@ -60,7 +74,11 @@
             </tbody>
         </table>
 
-        <!-- Tarjetas móvil -->
+        <!-- TARJETAS MÓVIL (ocultas en desktop con CSS)
+               Estrategia de doble renderizado: en vez de mostrar/ocultar
+               columnas en la tabla (problemático con el CSS encapsulado
+               de Angular), se renderizan dos estructuras HTML distintas
+               y el CSS elige cuál mostrar según el breakpoint. -->
         <div class="lista-mobile">
             @for (pedido of pedidosFiltrados(); track pedido.id) {
             <div class="pedido-card">
@@ -82,6 +100,8 @@
                 </div>
                 <div class="pedido-card-acciones">
                     <button class="btn-ver" (click)="verPedido(pedido.id)">👁 Ver pedido</button>
+                    <!-- En móvil el cambio de estado se hace directamente desde la lista,
+                             sin necesidad de abrir el detalle. -->
                     <select class="select-estado" (change)="actualizarEstado(pedido.id, $any($event.target).value)">
                         <option value="">Cambiar estado</option>
                         @for (estado of estadosValidos; track estado) {
@@ -95,10 +115,17 @@
     </div>
     }
 
+    <!-- ── VISTA: DETALLE DEL PEDIDO ───────────────────────
+         Visible cuando pedidoSeleccionado() tiene un valor.
+         Diseño en grid: tabla de productos a la izquierda,
+         sidebar con estado y datos del cliente a la derecha.
+    ─────────────────────────────────────────────────────── -->
     @if (pedidoSeleccionado()) {
     <div class="detalle-grid">
+
         <div class="card detalle-productos">
             <div class="card-header">
+                <!-- cerrar() pone pedidoSeleccionado a null → vuelve a la lista -->
                 <button class="btn-back" (click)="cerrar()">← Volver</button>
                 <h2>Detalle del pedido #{{ pedidoSeleccionado().id }}</h2>
             </div>
@@ -117,6 +144,7 @@
                         <td>{{ item.titulo }}</td>
                         <td>{{ item.cantidad }}</td>
                         <td>{{ item.precio_unidad }} €</td>
+                        <!-- Cálculo inline: cantidad × precio por unidad -->
                         <td>{{ item.cantidad * item.precio_unidad }} €</td>
                     </tr>
                     }
@@ -129,12 +157,12 @@
         </div>
 
         <div class="detalle-sidebar">
+
             <div class="card">
                 <h3>Estado del pedido</h3>
-                <span class="badge" [class]="pedidoSeleccionado().estado">
-                    {{ pedidoSeleccionado().estado }}
-                </span>
+                <span class="badge" [class]="pedidoSeleccionado().estado">{{ pedidoSeleccionado().estado }}</span>
                 <label>Cambiar estado</label>
+                <!-- Cambia el estado al seleccionar una opción nueva -->
                 <select (change)="actualizarEstado(pedidoSeleccionado().id, $any($event.target).value)">
                     <option value="">Seleccionar estado</option>
                     @for (estado of estadosValidos; track estado) {
@@ -145,28 +173,19 @@
 
             <div class="card">
                 <h3>Información del cliente</h3>
-                <div class="info-row">
-                    <span class="info-label">👤 Nombre</span>
-                    <span class="info-value">{{ pedidoSeleccionado().cliente }}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">✉️ Email</span>
-                    <span class="info-value">{{ pedidoSeleccionado().mail }}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">📞 Teléfono</span>
-                    <span class="info-value">{{ pedidoSeleccionado().telefono }}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">📍 Dirección</span>
-                    <span class="info-value">{{ pedidoSeleccionado().direccion_envio }}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">💳 Pago</span>
-                    <span class="info-value">{{ pedidoSeleccionado().metodo_pago }}</span>
-                </div>
+                <div class="info-row"><span class="info-label">👤 Nombre</span><span class="info-value">{{
+                        pedidoSeleccionado().cliente }}</span></div>
+                <div class="info-row"><span class="info-label">✉️ Email</span><span class="info-value">{{
+                        pedidoSeleccionado().mail }}</span></div>
+                <div class="info-row"><span class="info-label">📞 Teléfono</span><span class="info-value">{{
+                        pedidoSeleccionado().telefono }}</span></div>
+                <div class="info-row"><span class="info-label">📍 Dirección</span><span class="info-value">{{
+                        pedidoSeleccionado().direccion_envio }}</span></div>
+                <div class="info-row"><span class="info-label">💳 Pago</span><span class="info-value">{{
+                        pedidoSeleccionado().metodo_pago }}</span></div>
             </div>
         </div>
+
     </div>
     }
 

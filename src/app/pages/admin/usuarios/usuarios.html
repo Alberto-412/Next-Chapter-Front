@@ -1,6 +1,14 @@
+<!--
+  ============================================================
+  ARCHIVO: usuarios.html
+  QUÉ HACE: Vista de gestión de usuarios. Tres modos:
+            1. Lista (tabla desktop + tarjetas móvil con paginación)
+            2. Detalle de solo lectura
+            3. Formulario de edición
+  ============================================================
+-->
 <div class="usuarios">
 
-    <!-- ENCABEZADO -->
     <div class="page-header">
         <div>
             <h1>Gestión de Usuarios</h1>
@@ -11,14 +19,16 @@
     @if (mensaje()) { <p class="msg-ok">{{ mensaje() }}</p> }
     @if (error()) { <p class="msg-error">{{ error() }}</p> }
 
-    <!-- LISTADO -->
+    <!-- ── MODO 1: LISTA ───────────────────────────────────
+         Visible cuando NO hay usuario seleccionado.
+    ─────────────────────────────────────────────────────── -->
     @if (!usuarioSeleccionado()) {
     <div class="card">
         <div class="card-header">
             <h2>Todos los usuarios</h2>
         </div>
 
-        <!-- Tabla desktop -->
+        <!-- TABLA DESKTOP -->
         <table class="tabla-desktop">
             <thead>
                 <tr>
@@ -31,6 +41,7 @@
                 </tr>
             </thead>
             <tbody>
+                <!-- usuariosEnPagina() ya aplica el filtrado y la paginación -->
                 @for (usuario of usuariosEnPagina(); track usuario.id) {
                 <tr>
                     <td>
@@ -39,20 +50,15 @@
                             <span class="usuario-nombre">{{ usuario.nombre }}</span>
                         </div>
                     </td>
+                    <td><span class="usuario-mail">{{ usuario.mail }}</span></td>
+                    <td><span class="badge" [class]="usuario.rol">{{ usuario.rol }}</span></td>
                     <td>
-                        <span class="usuario-mail">{{ usuario.mail }}</span>
-                    </td>
-                    <td>
-                        <span class="badge" [class]="usuario.rol">{{ usuario.rol }}</span>
-                    </td>
-                    <td>
-                        <div class="estado-cell">
-                            @if (usuario.activo) {
-                            <span class="badge activo">Activo</span>
-                            } @else {
-                            <span class="badge inactivo">Inactivo</span>
-                            }
-                        </div>
+                        <!-- @if/@else para mostrar el badge de Activo o Inactivo -->
+                        @if (usuario.activo) {
+                        <span class="badge activo">Activo</span>
+                        } @else {
+                        <span class="badge inactivo">Inactivo</span>
+                        }
                     </td>
                     <td class="fecha">{{ usuario.fecha_registro | date:'dd/MM/yyyy' }}</td>
                     <td>
@@ -63,12 +69,15 @@
                             <button class="btn-icon" (click)="editarUsuario(usuario.id)" title="Editar">
                                 <span class="material-symbols-outlined">edit</span>
                             </button>
+                            <!-- El botón de validar solo aparece si la cuenta no está validada -->
                             @if (!usuario.validado) {
                             <button class="btn-icon success" (click)="validarUsuario(usuario.id)"
                                 title="Validar usuario">
                                 <span class="material-symbols-outlined">check_circle</span>
                             </button>
                             }
+                            <!-- Alterna el rol: si es admin lo pone cliente y viceversa.
+                                     El título del botón también cambia para indicar la acción. -->
                             <button class="btn-icon"
                                 (click)="cambiarRol(usuario.id, usuario.rol === 'admin' ? 'cliente' : 'admin')"
                                 title="{{ usuario.rol === 'admin' ? 'Quitar permisos de admin' : 'Hacer admin' }}">
@@ -88,24 +97,21 @@
         @if (totalPaginas() > 1) {
         <div class="pagination-controls">
             <button (click)="paginaAnterior()" [disabled]="paginaActual() === 1" class="pagination-btn">
-                <span _ngcontent-ng-c2706608894="" class="material-symbols-outlined">chevron_left</span>
+                <span class="material-symbols-outlined">chevron_left</span>
             </button>
-
             @for (pagina of paginasArray(); track pagina) {
-            <button (click)="irAPagina(pagina)" [class.active]="paginaActual() === pagina" class="pagination-btn">
-                {{ pagina }}
-            </button>
+            <!-- [class.active] resalta el botón de la página actual -->
+            <button (click)="irAPagina(pagina)" [class.active]="paginaActual() === pagina" class="pagination-btn">{{
+                pagina }}</button>
             }
-
             <button (click)="paginaSiguiente()" [disabled]="paginaActual() === totalPaginas()" class="pagination-btn">
-                <span _ngcontent-ng-c2706608894="" class="material-symbols-outlined">chevron_right</span>
+                <span class="material-symbols-outlined">chevron_right</span>
             </button>
-
             <span class="pagination-info">Página {{ paginaActual() }} de {{ totalPaginas() }}</span>
         </div>
         }
 
-        <!-- Tarjetas móvil -->
+        <!-- TARJETAS MÓVIL (misma estrategia que en pedidos.html) -->
         <div class="lista-mobile">
             @for (usuario of usuariosEnPagina(); track usuario.id) {
             <div class="usuario-card">
@@ -119,75 +125,42 @@
                     </div>
                     <span class="badge" [class]="usuario.rol">{{ usuario.rol }}</span>
                 </div>
-
                 <div class="usuario-card-meta">
-                    <span class="info-chip">
-                        <span class="chip-label">Estado</span>
-                        {{ usuario.activo ? 'Activo' : 'Inactivo' }}
-                    </span>
-                    <span class="info-chip">
-                        <span class="chip-label">Registro</span>
-                        {{ usuario.fecha_registro | date:'dd/MM/yy' }}
-                    </span>
+                    <span class="info-chip"><span class="chip-label">Estado</span>{{ usuario.activo ? 'Activo' :
+                        'Inactivo' }}</span>
+                    <span class="info-chip"><span class="chip-label">Registro</span>{{ usuario.fecha_registro |
+                        date:'dd/MM/yy' }}</span>
                 </div>
-
                 <div class="usuario-card-acciones">
-                    <button class="btn-icon" (click)="verUsuario(usuario.id)" title="Ver">
-                        <span class="material-symbols-outlined">visibility</span>
-                    </button>
-                    <button class="btn-icon" (click)="editarUsuario(usuario.id)" title="Editar">
-                        <span class="material-symbols-outlined">edit</span>
-                    </button>
+                    <button class="btn-icon" (click)="verUsuario(usuario.id)"><span
+                            class="material-symbols-outlined">visibility</span></button>
+                    <button class="btn-icon" (click)="editarUsuario(usuario.id)"><span
+                            class="material-symbols-outlined">edit</span></button>
                     @if (!usuario.validado) {
-                    <button class="btn-icon success" (click)="validarUsuario(usuario.id)" title="Validar">
-                        <span class="material-symbols-outlined">check_circle</span>
-                    </button>
+                    <button class="btn-icon success" (click)="validarUsuario(usuario.id)"><span
+                            class="material-symbols-outlined">check_circle</span></button>
                     }
                     <button class="btn-icon"
-                        (click)="cambiarRol(usuario.id, usuario.rol === 'admin' ? 'cliente' : 'admin')"
-                        title="{{ usuario.rol === 'admin' ? 'Quitar admin' : 'Hacer admin' }}">
-                        <span class="material-symbols-outlined">manage_accounts</span>
-                    </button>
-                    <button class="btn-icon danger" (click)="darDeBaja(usuario.id)" title="Dar de baja">
-                        <span class="material-symbols-outlined">person_off</span>
-                    </button>
+                        (click)="cambiarRol(usuario.id, usuario.rol === 'admin' ? 'cliente' : 'admin')"><span
+                            class="material-symbols-outlined">manage_accounts</span></button>
+                    <button class="btn-icon danger" (click)="darDeBaja(usuario.id)"><span
+                            class="material-symbols-outlined">person_off</span></button>
                 </div>
-            </div>
-            }
-
-            <!-- PAGINACIÓN MOBILE -->
-            @if (totalPaginas() > 1) {
-            <div class="pagination-controls">
-                <button (click)="paginaAnterior()" [disabled]="paginaActual() === 1" class="pagination-btn">
-                    <span _ngcontent-ng-c2706608894="" class="material-symbols-outlined">chevron_left</span>
-                </button>
-
-                @for (pagina of paginasArray(); track pagina) {
-                <button (click)="irAPagina(pagina)" [class.active]="paginaActual() === pagina" class="pagination-btn">
-                    {{ pagina }}
-                </button>
-                }
-
-                <button (click)="paginaSiguiente()" [disabled]="paginaActual() === totalPaginas()"
-                    class="pagination-btn">
-                    <span _ngcontent-ng-c2706608894="" class="material-symbols-outlined">chevron_right</span>
-                </button>
-
-                <span class="pagination-info">Página {{ paginaActual() }} de {{ totalPaginas() }}</span>
             </div>
             }
         </div>
     </div>
     }
 
-    <!-- DETALLE DEL USUARIO -->
+    <!-- ── MODO 2: DETALLE DE SOLO LECTURA ─────────────────
+         Visible cuando hay usuario seleccionado Y modoEdicion es false.
+    ─────────────────────────────────────────────────────── -->
     @if (usuarioSeleccionado() && !modoEdicion()) {
     <div class="card detalle-card">
         <div class="card-header">
             <button class="btn-back" (click)="cerrarDetalle()">← Volver</button>
             <h2>Detalles del usuario</h2>
         </div>
-
         <div class="detalle-usuario">
             <div class="detalle-avatar-section">
                 <div class="avatar grande">{{ usuarioSeleccionado().nombre ?
@@ -204,44 +177,28 @@
                     </span>
                 </div>
             </div>
-
             <div class="detalle-info">
-                <div class="info-row">
-                    <span class="info-label">ID Usuario</span>
-                    <span class="info-value">{{ usuarioSeleccionado().id }}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Email</span>
-                    <span class="info-value">{{ usuarioSeleccionado().mail }}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Nombre</span>
-                    <span class="info-value">{{ usuarioSeleccionado().nombre }}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Fecha de Registro</span>
-                    <span class="info-value">{{ usuarioSeleccionado().fecha_registro | date:'dd/MM/yyyy HH:mm' }}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Rol</span>
-                    <span class="info-value">{{ usuarioSeleccionado().rol | uppercase }}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Estado</span>
-                    <span class="info-value">{{ usuarioSeleccionado().activo ? 'Activo' : 'Inactivo' }}</span>
-                </div>
+                <div class="info-row"><span class="info-label">ID Usuario</span><span class="info-value">{{
+                        usuarioSeleccionado().id }}</span></div>
+                <div class="info-row"><span class="info-label">Email</span><span class="info-value">{{
+                        usuarioSeleccionado().mail }}</span></div>
+                <div class="info-row"><span class="info-label">Nombre</span><span class="info-value">{{
+                        usuarioSeleccionado().nombre }}</span></div>
+                <div class="info-row"><span class="info-label">Fecha de Registro</span><span class="info-value">{{
+                        usuarioSeleccionado().fecha_registro | date:'dd/MM/yyyy HH:mm' }}</span></div>
+                <div class="info-row"><span class="info-label">Rol</span><span class="info-value">{{
+                        usuarioSeleccionado().rol | uppercase }}</span></div>
+                <div class="info-row"><span class="info-label">Estado</span><span class="info-value">{{
+                        usuarioSeleccionado().activo ? 'Activo' : 'Inactivo' }}</span></div>
             </div>
         </div>
-
         <div class="detalle-acciones">
             <button class="btn-secondary" (click)="editarUsuario(usuarioSeleccionado().id)">
-                <span class="material-symbols-outlined">edit</span>
-                Editar usuario
+                <span class="material-symbols-outlined">edit</span> Editar usuario
             </button>
             @if (!usuarioSeleccionado().validado) {
             <button class="btn-primary" (click)="validarUsuario(usuarioSeleccionado().id)">
-                <span class="material-symbols-outlined">check_circle</span>
-                Validar usuario
+                <span class="material-symbols-outlined">check_circle</span> Validar usuario
             </button>
             }
             <button class="btn-secondary"
@@ -250,21 +207,24 @@
                 {{ usuarioSeleccionado().rol === 'admin' ? 'Quitar' : 'Dar' }} rol de admin
             </button>
             <button class="btn-danger" (click)="darDeBaja(usuarioSeleccionado().id)">
-                <span class="material-symbols-outlined">person_off</span>
-                Dar de baja
+                <span class="material-symbols-outlined">person_off</span> Dar de baja
             </button>
         </div>
     </div>
     }
 
-    <!-- FORMULARIO EDICIÓN -->
+    <!-- ── MODO 3: FORMULARIO DE EDICIÓN ───────────────────
+         Visible cuando hay usuario seleccionado Y modoEdicion es true.
+         Usa [(ngModel)] que es la sintaxis de two-way binding:
+         [ngModel] lee el valor del signal y (ngModelChange) lo actualiza
+         en el signal con updateUsuarioSeleccionado().
+    ─────────────────────────────────────────────────────── -->
     @if (usuarioSeleccionado() && modoEdicion()) {
     <div class="card edicion-card">
         <div class="card-header">
             <button class="btn-back" (click)="cerrarDetalle()">← Volver</button>
             <h2>Editar usuario</h2>
         </div>
-
         <div class="form-section">
             <h3>Información Personal</h3>
             <div class="form-row">
@@ -279,20 +239,7 @@
                         (ngModelChange)="updateUsuarioSeleccionado('mail', $event)" />
                 </div>
             </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Teléfono</label>
-                    <input type="tel" [ngModel]="usuarioSeleccionado().telefono"
-                        (ngModelChange)="updateUsuarioSeleccionado('telefono', $event)" />
-                </div>
-                <div class="form-group">
-                    <label>Dirección</label>
-                    <input [ngModel]="usuarioSeleccionado().direccion"
-                        (ngModelChange)="updateUsuarioSeleccionado('direccion', $event)" />
-                </div>
-            </div>
         </div>
-
         <div class="form-section">
             <h3>Configuración de Cuenta</h3>
             <div class="form-row">
@@ -306,6 +253,8 @@
                 </div>
                 <div class="form-group">
                     <label>Estado</label>
+                    <!-- El campo 'activo' es boolean en el signal, pero los <option>
+                           devuelven string. Por eso convertimos: 1/'1' → true, 0/'0' → false -->
                     <select [ngModel]="usuarioSeleccionado().activo ? 1 : 0"
                         (ngModelChange)="updateUsuarioSeleccionado('activo', $event == 1 || $event === '1')">
                         <option [value]="1">Activo</option>
@@ -314,11 +263,9 @@
                 </div>
             </div>
         </div>
-
         <div class="detalle-acciones">
             <button class="btn-primary" (click)="guardarUsuario()">
-                <span class="material-symbols-outlined">save</span>
-                Guardar cambios
+                <span class="material-symbols-outlined">save</span> Guardar cambios
             </button>
             <button class="btn-secondary" (click)="cerrarDetalle()">Cancelar</button>
         </div>

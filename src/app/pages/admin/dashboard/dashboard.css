@@ -157,7 +157,7 @@
 }
 
 .badge-count {
-  background: linear-gradient(135deg, var(--color-rosa), #ff6b7a);
+  background: var(--color-rosa);
   color: var(--color-blanco);
   padding: 2px 8px;
   border-radius: 16px;
@@ -224,7 +224,7 @@ td:nth-child(6) {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--color-morado), #9b7eff);
+  background: var(--color-morado);
   color: var(--color-blanco);
   display: flex;
   align-items: center;
@@ -394,7 +394,7 @@ td:nth-child(6) {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--color-turquesa), #4ad9c9);
+  background: var(--color-turquesa);
   color: var(--color-blanco);
   display: flex;
   align-items: center;
@@ -430,7 +430,7 @@ td:nth-child(6) {
 }
 
 .btn-aprobar {
-  background: linear-gradient(135deg, var(--color-turquesa), #4ad9c9);
+  background: var(--color-turquesa);
   color: var(--color-blanco);
   border: none;
   padding: 5px 10px;
