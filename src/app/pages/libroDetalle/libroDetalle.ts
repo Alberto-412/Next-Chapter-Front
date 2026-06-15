@@ -8,7 +8,7 @@ import { LibrosService } from '../../core/services/libros';
 import { Resena } from '../../core/models/resena';
 import { ResenasService } from '../../core/services/resenas';
 import { ResenasLibro } from '../../component/resenasLibro/resenasLibro';
-
+import { Cart as CartService } from '../../services/cart';
 @Component({
   selector: 'app-libro-detalle',
   templateUrl: './libroDetalle.html',
@@ -16,6 +16,8 @@ import { ResenasLibro } from '../../component/resenasLibro/resenasLibro';
   imports: [DatePipe, RouterLink, ResenasLibro],
 })
 export class LibroDetalle {
+
+  private readonly cartService = inject(CartService);
   /**
    * ActivatedRoute nos permite leer datos de la URL.
    *
@@ -96,8 +98,17 @@ export class LibroDetalle {
       return;
     }
 
-    await this.cargarDetalle(id);
+    await this.cargarDetalle(id)
   }
+  agregarAlCarrito(id: number) {
+  this.cartService.addItem(id, 1).subscribe({
+    next: () => {
+      this.cartService.cartCount.update((n) => n + 1); // actualiza el badge del icono
+      console.log('Añadido al carrito');
+    },
+    error: (err) => console.error('No se pudo añadir al carrito', err),
+  });
+}
 
   /**
    * cargarDetalle(id)
