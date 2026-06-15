@@ -3,10 +3,11 @@ import { RouterLink } from '@angular/router';
 
 import { LibrosService } from '../../core/services/libros';
 import { Libro } from '../../core/models/libro';
+import { Footer } from '../../component/footer/footer';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink],
+  imports: [RouterLink, Footer],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
