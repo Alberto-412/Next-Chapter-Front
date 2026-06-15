@@ -6,10 +6,11 @@ import { FiltroLibros } from '../../core/models/filtro_libros';
 
 import { FiltrosCatalogo } from '../../component/filtrosCatalogo/filtrosCatalogo';
 import { LibroCard } from '../../component/libroCard/libroCard';
+import { Newsletter } from '../../component/newsletter/newsletter';
 
 @Component({
   selector: 'app-catalogo',
-  imports: [FiltrosCatalogo, LibroCard],
+  imports: [FiltrosCatalogo, LibroCard, Newsletter],
   templateUrl: './catalogo.html',
   styleUrl: './catalogo.css',
 })
@@ -48,6 +49,37 @@ export class Catalogo {
   error = signal('');
 
   /**
+   * Página actual del catálogo.
+   *
+   * Empezamos en la página 1 porque
+   * es la primera que verá el usuario.
+   */
+  paginaActual = signal(1);
+
+  /**
+   * Número de libros que queremos mostrar
+   * por cada página.
+   */
+  limite = signal(12);
+
+  /**
+   * Total de páginas que nos devuelve el backend.
+   *
+   * Esto cambia si filtramos por categoría,
+   * precio o búsqueda.
+   */
+  totalPaginas = signal(1);
+
+  /**
+   * Guardamos los últimos filtros aplicados.
+   *
+   * Esto es importante porque si estamos filtrando
+   * por "manga" y pasamos a la página 2,
+   * queremos seguir viendo manga, no volver a todos los libros.
+   */
+  filtrosActuales = signal<FiltroLibros>({});
+
+  /**
    * Al entrar en la página cargamos todos los libros,
    * sin aplicar filtros.
    */
@@ -66,12 +98,26 @@ export class Catalogo {
    * Si recibe filtros:
    * GET /api/libros?categoria=1&precioMin=10&precioMax=30
    */
+
   async cargarLibros(filtros?: FiltroLibros) {
     try {
       this.cargando.set(true);
       this.error.set('');
 
-      const response = await this.librosService.getAll(filtros);
+      /**
+       * Creamos un objeto con los filtros que llegan
+       * y además le añadimos la paginación.
+       *
+       * Usamos spread (...) para no perder los filtros
+       * de búsqueda, categoría o precio.
+       */
+      const filtrosConPaginacion: FiltroLibros = {
+        ...filtros,
+        pagina: this.paginaActual(),
+        limite: this.limite(),
+      };
+
+      const response = await this.librosService.getAll(filtrosConPaginacion);
 
       /**
        * Guardamos los libros originales y también
@@ -79,6 +125,13 @@ export class Catalogo {
        */
       this.librosOriginales.set(response.data);
       this.libros.set(response.data);
+      /**
+       * Guardamos el total de páginas que devuelve el back.
+       *
+       * Así Angular sabe cuántos botones de páginas
+       * tiene que mostrar.
+       */
+      this.totalPaginas.set(response.paginacion.totalPaginas);
     } catch (error) {
       console.error(error);
       this.error.set('No se pudieron cargar los libros.');
@@ -95,9 +148,62 @@ export class Catalogo {
    *
    * Flujo:
    * FiltrosCatalogo → filtrosChange → Catalogo → LibrosService
+   * Cuando aplicamos filtros volvemos siempre
+   * a la página 1.
+   *
+   * Esto evita estar en página 4 y que al filtrar
+   * no aparezca nada porque ese filtro solo tiene 1 página.
    */
   async aplicarFiltros(filtros: FiltroLibros) {
+    this.paginaActual.set(1);
+    this.filtrosActuales.set(filtros);
+
     await this.cargarLibros(filtros);
+  }
+  /**
+   * cambiarPagina()
+   *
+   * Este método se llamará cuando el usuario pulse
+   * una página del paginador.
+   */
+  async cambiarPagina(pagina: number) {
+    /**
+     * Evitamos ir a páginas que no existen.
+     */
+    if (pagina < 1 || pagina > this.totalPaginas()) {
+      return;
+    }
+
+    /**
+     * Actualizamos la página actual.
+     */
+    this.paginaActual.set(pagina);
+
+    /**
+     * Volvemos a cargar libros, pero manteniendo
+     * los filtros que ya estaban aplicados.
+     */
+    await this.cargarLibros(this.filtrosActuales());
+
+      // Cuando cargan los nuevos libros
+  // volvemos arriba del catálogo.
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+  }
+  /**
+   * paginas()
+   *
+   * Creamos un array de números para poder pintarlo
+   * fácilmente en el HTML con @for.
+   *
+   * Si totalPaginas es 4, devuelve:
+   *
+   * [1, 2, 3, 4]
+   */
+  paginas() {
+    return Array.from({ length: this.totalPaginas() }, (_, index) => index + 1);
   }
 
   /**

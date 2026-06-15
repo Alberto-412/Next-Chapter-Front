@@ -67,6 +67,14 @@ export class LibrosService {
       params = params.set('precioMax', filtros.precioMax);
     }
 
+    if (filtros?.pagina !== undefined) {
+      params = params.set('pagina', filtros.pagina);
+    }
+
+    if (filtros?.limite !== undefined) {
+      params = params.set('limite', filtros.limite);
+    }
+
     /**
      * Hacemos la petición GET al back.
      *

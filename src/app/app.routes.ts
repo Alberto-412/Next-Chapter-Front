@@ -1,9 +1,11 @@
+//HOME
+import { Home } from './pages/home/home';
+
 import { Routes } from '@angular/router';
 import { Cart } from './pages/cart/cart';
 import { Checkout } from './pages/checkout/checkout';
 import { MyOrders } from './pages/my-orders/my-orders';
 import { OrderDetail } from './pages/order-detail/order-detail';
-
 
 import { authGuard, adminGuard } from './guards/auth.guard';
 
@@ -26,7 +28,22 @@ import { Login } from './pages/login/login';
 import { Catalogo } from './pages/catalogo/catalogo';
 import { LibroDetalle } from './pages/libroDetalle/libroDetalle';
 
+//Paginas simuladsas
+import { Devoluciones } from './pages/devoluciones/devoluciones';
+import { QuienesSomos } from './pages/quienesSomos/quienesSomos';
+import { PreguntasFrecuentes } from './pages/preguntasFrecuentes/preguntasFrecuentes';
+import { TrabajaConNosotros } from './pages/trabajaConNosotros/trabajaConNosotros';
+import { Envios } from './pages/envios/envios';
+import { BonoCulturalJoven } from './pages/bonoCulturalJoven/bonoCulturalJoven';
+import { NuestrasLibrerias } from './pages/nuestrasLibrerias/nuestrasLibrerias';
+
+//COntacto
+import { Contacto } from './pages/contacto/contacto';
+
 export const routes: Routes = [
+  // Home
+  { path: '', component: Home },
+
   // Rutas públicas
   { path: 'login', component: Login },
 
@@ -51,13 +68,29 @@ export const routes: Routes = [
   // Ruta por defecto TEMPORAL XXXXXXXXXXXXXX
   { path: 'XXXXXXXXXXX', redirectTo: 'login', pathMatch: 'full' },
 
-  //Catalogo
-  { path: '', component: Catalogo },
+  // Catálogo
   { path: 'catalogo', component: Catalogo },
   { path: 'libros/:id', component: LibroDetalle },
 
+  //Carrito y ordenes
   { path: 'cart', component: Cart },
   { path: 'checkout', component: Checkout },
   { path: 'orders', component: MyOrders },
-  { path: 'orders/:id', component: OrderDetail},
+  { path: 'orders/:id', component: OrderDetail },
+
+  //Paginas simuladas
+  { path: 'devoluciones', component: Devoluciones },
+  { path: 'quienes-somos', component: QuienesSomos },
+
+  { path: 'preguntas-frecuentes', component: PreguntasFrecuentes },
+  { path: 'trabaja-con-nosotros', component: TrabajaConNosotros },
+
+  { path: 'envios', component: Envios },
+
+  { path: 'bono-cultural-joven', component: BonoCulturalJoven },
+
+  { path: 'nuestras-librerias', component: NuestrasLibrerias },
+
+  //Contacto
+  { path: 'contacto', component: Contacto },
 ];

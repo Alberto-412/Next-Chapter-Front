@@ -17,4 +17,7 @@ export interface FiltroLibros {
   categoria?: number;
   precioMin?: number;
   precioMax?: number;
+  //paginación
+  pagina?: number;
+  limite?: number;
 }
