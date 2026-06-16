@@ -100,14 +100,8 @@ export class LibroDetalle {
 
     await this.cargarDetalle(id)
   }
-  agregarAlCarrito(id: number) {
-  this.cartService.addItem(id, 1).subscribe({
-    next: () => {
-      this.cartService.cartCount.update((n) => n + 1); // actualiza el badge del icono
-      console.log('Añadido al carrito');
-    },
-    error: (err) => console.error('No se pudo añadir al carrito', err),
-  });
+  agregarAlCarrito(libro: Libro) {
+  this.cartService.agregarItem(libro);
 }
 
   /**

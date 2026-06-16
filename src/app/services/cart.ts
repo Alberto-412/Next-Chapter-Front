@@ -1,37 +1,76 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, inject, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { forkJoin, of } from 'rxjs';
+
+export interface CartItem {
+  id_producto: number;
+  titulo: string;
+  precio: number;
+  imagen: string;
+  cantidad: number;
+}
 
 @Injectable({ providedIn: 'root' })
 export class Cart {
-  private http = inject(HttpClient);
-  private apiUrl = `${environment.apiUrl}/cart`;
+  private readonly STORAGE_KEY = 'carrito';
+private http = inject(HttpClient);
+private apiUrl = `${environment.apiUrl}/cart`;
 
-  // Signal con el número de items del carrito (para el badge del icono)
-  cartCount = signal(0);
+  items = signal<CartItem[]>(this.cargarDeLocalStorage());
+  cartCount = computed(() => this.items().reduce((acc, it) => acc + it.cantidad, 0));
+  total = computed(() => this.items().reduce((acc, it) => acc + it.precio * it.cantidad, 0));
 
-  // GET /api/cart → ver el contenido del carrito
-  getCarrito() {
-    return this.http.get<any[]>(this.apiUrl);
+  private cargarDeLocalStorage(): CartItem[] {
+    const raw = localStorage.getItem(this.STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
   }
 
-  // POST /api/cart/items → añadir un libro al carrito
-  addItem(bookId: number, cantidad: number) {
-    return this.http.post(`${this.apiUrl}/items`, { id_producto: bookId, cantidad });
+  private guardar(items: CartItem[]) {
+    this.items.set(items);
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(items));
   }
 
-  // PUT /api/cart/items/:bookId → cambiar la cantidad de un libro
-  updateCantidad(bookId: number, cantidad: number) {
-    return this.http.put(`${this.apiUrl}/items/${bookId}`, { cantidad });
+  agregarItem(libro: { id: number; titulo: string; precio: number | string; imagen: string }) {
+    const items = [...this.items()];
+    const existente = items.find((it) => it.id_producto === libro.id);
+    if (existente) {
+      existente.cantidad++;
+    } else {
+      items.push({
+        id_producto: libro.id,
+        titulo: libro.titulo,
+        precio: Number(libro.precio),
+        imagen: libro.imagen,
+        cantidad: 1,
+      });
+    }
+    this.guardar(items);
   }
 
-  // DELETE /api/cart/items/:bookId → quitar un libro
-  removeItem(bookId: number) {
-    return this.http.delete(`${this.apiUrl}/items/${bookId}`);
+  cambiarCantidad(id_producto: number, cantidad: number) {
+    if (cantidad < 1) return;
+    this.guardar(this.items().map((it) => it.id_producto === id_producto ? { ...it, cantidad } : it));
   }
 
-  // DELETE /api/cart → vaciar el carrito entero
+  removeItem(id_producto: number) {
+    this.guardar(this.items().filter((it) => it.id_producto !== id_producto));
+  }
+
   vaciarCarrito() {
-    return this.http.delete(this.apiUrl);
+    this.guardar([]);
   }
+
+  // Vuelca el carrito local al carrito del back (el token lo pone el interceptor).
+  // Solo se usa en el checkout, justo antes de crear el pedido.
+  sincronizarConBackend() {
+    const items = this.items();
+    if (items.length === 0) return of([]);
+    const peticiones = items.map((it) =>
+      this.http.post(`${this.apiUrl}/items`, { id_producto: it.id_producto, cantidad: it.cantidad })
+    );
+    return forkJoin(peticiones);
+  }
+
+
 }

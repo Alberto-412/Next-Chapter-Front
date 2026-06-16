@@ -1,6 +1,6 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Cart as CartService } from '../../services/cart';
 
 @Component({
@@ -10,43 +10,56 @@ import { Cart as CartService } from '../../services/cart';
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
-export class Navbar implements OnInit {
+export class Navbar {
   private cartService = inject(CartService);
+  private router = inject(Router);
 
-  items = signal<any[]>([]);      // productos del carrito (para el cajón)
-  drawerAbierto = signal(false);  // controla si el cajón está abierto
+  @ViewChild('cuentaWrapper') cuentaWrapper?: ElementRef;
 
-  ngOnInit() {
-    this.cargarCarrito();
+  items = this.cartService.items;
+  total = this.cartService.total;
+  cartCount = this.cartService.cartCount;
+
+  drawerAbierto = signal(false);
+  menuCuentaAbierto = signal(false);
+
+  logueado(): boolean {
+    return !!localStorage.getItem('token');
   }
 
-  cargarCarrito() {
-    this.cartService.getCarrito().subscribe({
-      next: (data) => this.items.set(data),
-      error: () => this.items.set([]),
-    });
+  toggleMenuCuenta() {
+    this.menuCuentaAbierto.set(!this.menuCuentaAbierto());
   }
 
-  // Número total de productos (para el badge)
-  cartCount() {
-    return this.items().reduce((acc, item) => acc + item.cantidad, 0);
+  cerrarMenuCuenta() {
+    this.menuCuentaAbierto.set(false);
   }
 
-  // Total en € (para mostrar en el cajón)
-  total() {
-    return this.items().reduce((acc, item) => acc + item.precio * item.cantidad, 0);
+  cerrarSesion() {
+    localStorage.removeItem('token');
+    this.menuCuentaAbierto.set(false);
+    this.router.navigate(['/']);
+  }
+
+  // cierra el desplegable al hacer clic en cualquier sitio fuera de él
+  @HostListener('document:click', ['$event'])
+  onClickFuera(event: MouseEvent) {
+    if (!this.menuCuentaAbierto()) return;
+    const wrapper = this.cuentaWrapper?.nativeElement;
+    if (wrapper && !wrapper.contains(event.target)) {
+      this.menuCuentaAbierto.set(false);
+    }
   }
 
   toggleDrawer() {
     this.drawerAbierto.set(!this.drawerAbierto());
-    if (this.drawerAbierto()) this.cargarCarrito(); // refresca al abrir
   }
 
   cerrarDrawer() {
     this.drawerAbierto.set(false);
   }
 
-  eliminar(bookId: number) {
-    this.cartService.removeItem(bookId).subscribe(() => this.cargarCarrito());
+  eliminar(id: number) {
+    this.cartService.removeItem(id);
   }
 }

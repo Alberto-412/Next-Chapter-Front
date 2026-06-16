@@ -18,10 +18,24 @@
       <span class="icono-texto">Favoritos</span>
     </a>
 
-    <a routerLink="/cuenta" class="icono icono-cuenta">
-      <span class="material-symbols-outlined">person</span>
-      <span class="icono-texto">Mi cuenta</span>
-    </a>
+    <div class="cuenta-wrapper" #cuentaWrapper>
+      <button class="icono icono-cuenta" (click)="toggleMenuCuenta()">
+        <span class="material-symbols-outlined">person</span>
+        <span class="icono-texto">Mi cuenta</span>
+      </button>
+
+      @if (menuCuentaAbierto()) {
+        <div class="cuenta-menu">
+          @if (logueado()) {
+            <a routerLink="/my-orders" (click)="cerrarMenuCuenta()">Mis pedidos</a>
+            <button type="button" (click)="cerrarSesion()">Cerrar sesión</button>
+          } @else {
+            <a routerLink="/login" (click)="cerrarMenuCuenta()">Iniciar sesión</a>
+            <a routerLink="/registro" (click)="cerrarMenuCuenta()">Registrarme</a>
+          }
+        </div>
+      }
+    </div>
 
     <button class="icono icono-carrito" (click)="toggleDrawer()">
       <span class="material-symbols-outlined">shopping_cart</span>
@@ -66,7 +80,7 @@
   <div class="drawer-pie">
     <div class="drawer-total">
       <span>Total:</span>
-      <strong>{{ total() }} €</strong>
+      <strong>{{ total() | number:'1.2-2' }} €</strong>
     </div>
     <a routerLink="/cart" class="drawer-btn-ver" (click)="cerrarDrawer()">Ver carrito</a>
     <a routerLink="/checkout" class="drawer-btn-finalizar" (click)="cerrarDrawer()">Finalizar compra</a>
