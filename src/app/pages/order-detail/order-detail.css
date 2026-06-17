@@ -18,3 +18,47 @@
 .detalle-subtotal { font-weight: 700; color: var(--color-azul); }
 .detalle-total { display: flex; justify-content: space-between; margin-top: 1.5rem; padding-top: 1rem; border-top: 2px solid #eee; font-size: 1.3rem; }
 .detalle-total strong { color: var(--color-morado); }
+
+.detalle-acciones {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+.btn-factura {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--color-morado);
+  color: var(--color-blanco);
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-factura:hover {
+  background: var(--color-rosa);
+}
+
+/* la cabecera de factura solo se ve al imprimir */
+.solo-print {
+  display: none;
+}
+
+/* ===== MODO IMPRESIÓN ===== */
+@media print {
+  .no-print {
+    display: none !important;   /* oculta el botón */
+  }
+  .solo-print {
+    display: block !important;  /* muestra "Next Chapter / Factura" */
+    margin-bottom: 24px;
+  }
+  .detalle-container {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    color: #000;
+  }
+}

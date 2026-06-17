@@ -69,3 +69,11 @@ body:has(.admin-layout) .navbar {
   --color-gris-medio: #64748b;
   --color-gris-oscuro: #334155;
 }
+
+/* Ocultar navbar y footer al imprimir (para las facturas) */
+@media print {
+  app-navbar,
+  app-footer {
+    display: none !important;
+  }
+}

@@ -42,6 +42,12 @@
         [cargando]="cargando()"
         (finalizar)="finalizarPedido()" />
       @if (error()) { <p class="checkout-error">{{ error() }}</p> }
+      @if (necesitaLogin()) {
+        <div class="checkout-login-aviso">
+          <p>Para finalizar tu pedido necesitas iniciar sesión.</p>
+          <button type="button" class="checkout-login-btn" (click)="irALogin()">Iniciar sesión</button>
+        </div>
+      }
     </div>
   </div>
 </div>
