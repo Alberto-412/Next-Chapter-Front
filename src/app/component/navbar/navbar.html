@@ -30,10 +30,12 @@
 
       @if (menuCuentaAbierto()) {
         <div class="cuenta-menu">
-          @if (logueado()) {
-            <a routerLink="/my-orders" (click)="cerrarMenuCuenta()">Mis pedidos</a>
-            <button type="button" (click)="cerrarSesion()">Cerrar sesión</button>
-          } @else {
+         @if (logueado()) {
+  <a routerLink="/perfil" (click)="cerrarMenuCuenta()">Mi perfil</a>
+  <a routerLink="/orders" (click)="cerrarMenuCuenta()">Mis pedidos</a>
+  <button type="button" (click)="cerrarSesion()">Cerrar sesión</button>
+}
+           @else {
             <a routerLink="/login" (click)="cerrarMenuCuenta()">Iniciar sesión</a>
             <a routerLink="/registro" (click)="cerrarMenuCuenta()">Registrarme</a>
           }
