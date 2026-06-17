@@ -69,3 +69,19 @@ body:has(.admin-layout) .navbar {
   --color-gris-medio: #64748b;
   --color-gris-oscuro: #334155;
 }
+
+/**
+ * Evita que aparezca scroll horizontal en la página.
+ *
+ * A veces algún componente (footer, carrusel, imagen,
+ * formulario, etc.) puede sobresalir unos pocos píxeles
+ * del ancho de la pantalla.
+ *
+ * Con overflow-x: hidden ocultamos cualquier desbordamiento
+ * horizontal para que el usuario no pueda desplazarse
+ * hacia los lados accidentalmente.
+ */
+html,
+body {
+  overflow-x: hidden;
+}

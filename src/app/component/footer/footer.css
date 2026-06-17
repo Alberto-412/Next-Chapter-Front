@@ -5,6 +5,9 @@
  * El estilo visual lo controlamos aquí con CSS propio.
  */
 .footer-nextchapter {
+  width: 100%;
+  overflow-x: hidden;
+
   padding: 4rem 0 2rem;
 
   background-color: var(--color-azul);
@@ -51,6 +54,9 @@
  */
 .footer-nextchapter__logo {
   width: 150px;
+  max-width: 100%;
+  height: auto;
+
   margin-bottom: 1.5rem;
 }
 
@@ -132,6 +138,8 @@
   justify-content: space-between;
   gap: 1rem;
 
+  width: 100%;
+
   margin-top: 3rem;
   padding-top: 1.5rem;
 
@@ -147,10 +155,44 @@
 }
 
 /**
- * Ajustes responsive propios.
+ * Variante compacta para usar el newsletter dentro del footer.
+ */
+.newsletter--compact {
+  width: 100%;
+  max-width: 100%;
+
+  padding: 2rem;
+  margin: 0;
+
+  border-radius: 1.5rem;
+}
+
+.newsletter--compact h2 {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+}
+
+.newsletter--compact .newsletter__texto {
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.newsletter--compact .newsletter__form {
+  width: 100%;
+  max-width: 100%;
+}
+
+/**
+ * Contenedor principal del footer.
  *
- * Bootstrap ya coloca las columnas una debajo de otra.
- * Aquí solo mejoramos los espacios y alineación.
+ * Usamos un ancho similar al container-xl de Bootstrap.
+ */
+.footer-nextchapter .container {
+  width: 100%;
+  max-width: 1320px;
+}
+
+/**
+ * Responsive tablet.
  */
 @media (width <= 992px) {
   .footer-nextchapter__newsletter {
@@ -158,6 +200,9 @@
   }
 }
 
+/**
+ * Responsive móvil.
+ */
 @media (width <= 768px) {
   .footer-nextchapter {
     padding: 3rem 0 1.5rem;
@@ -179,28 +224,14 @@
 }
 
 /**
- * Variante compacta para usar el newsletter dentro del footer.
+ * Móviles pequeños.
  */
-.newsletter--compact {
-  padding: 2rem;
-  margin: 0;
+@media (width <= 576px) {
+  .newsletter--compact {
+    padding: 1.5rem;
+  }
 
-  border-radius: 1.5rem;
-}
-
-.newsletter--compact h2 {
-  font-size: clamp(1.4rem, 3vw, 2rem);
-}
-
-.newsletter--compact .newsletter__texto {
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
-}
-
-.newsletter--compact .newsletter__form {
-  max-width: 100%;
-}
-
-.footer-nextchapter .container {
-  max-width: 1500px;
+  .footer-nextchapter__bottom {
+    width: 100%;
+  }
 }
