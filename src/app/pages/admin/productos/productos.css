@@ -106,6 +106,13 @@ tr:last-child td {
   color: var(--color-azul);
 }
 
+.producto-autor {
+  display: block;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--color-azul);
+}
+
 .producto-isbn {
   display: block;
   font-size: 0.75rem;

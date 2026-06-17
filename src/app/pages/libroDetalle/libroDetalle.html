@@ -126,3 +126,69 @@
 }
 
 <app-resenas-libro [resenas]="resenas()" />
+
+<!--
+  ════════════════════════════════════════════════════════
+  BLOQUE NUEVO: puntuar el libro y dejar una reseña.
+  Va fuera del @if (libro(); as libro) de arriba, así que
+  leemos el libro con la señal libro() directamente, igual
+  que ya hace <app-resenas-libro> con resenas().
+  ════════════════════════════════════════════════════════
+-->
+@if (libro()) {
+<section class="libro-detalle__resena-form">
+
+    <h2 class="libro-detalle__resena-form-titulo">
+        Cuéntanos qué te ha parecido
+    </h2>
+
+    <!-- Si no ha iniciado sesión: aviso con enlace al login -->
+    @if (!estaLogueado) {
+    <p class="libro-detalle__resena-form-aviso">
+        <a routerLink="/login">Inicia sesión</a> para puntuar este libro y dejar tu opinión.
+    </p>
+    }
+
+    <!-- Si ha iniciado sesión: formulario -->
+    @if (estaLogueado) {
+
+    @if (mensajeOkResena()) {
+    <p class="libro-detalle__resena-form-mensaje libro-detalle__resena-form-mensaje--ok">
+        {{ mensajeOkResena() }}
+    </p>
+    }
+    @if (errorResena()) {
+    <p class="libro-detalle__resena-form-mensaje libro-detalle__resena-form-mensaje--error">
+        {{ errorResena() }}
+    </p>
+    }
+
+    <!-- Puntuación: select simple, sin estrellas ni nada del
+             componente de tu compañera -->
+    <div class="libro-detalle__select-grupo">
+        <label class="libro-detalle__select-label" for="resena-calificacion">
+            Tu puntuación
+        </label>
+
+        <select id="resena-calificacion" class="libro-detalle__select-calificacion" [value]="calificacionSeleccionada()"
+            (change)="actualizarCalificacion($event)">
+            <option value="0">Selecciona una puntuación</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+    </div>
+
+    <textarea class="libro-detalle__resena-form-textarea" placeholder="Escribe tu opinión sobre el libro (opcional)"
+        [value]="comentarioNuevo()" (input)="actualizarComentario($event)">
+        </textarea>
+
+    <button type="button" class="btn libro-detalle__btn" [disabled]="enviandoResena()" (click)="enviarResena()">
+        {{ enviandoResena() ? 'Publicando...' : 'Publicar reseña' }}
+    </button>
+    }
+
+</section>
+}

@@ -81,6 +81,16 @@ export class Productos implements OnInit {
     return Array.from(cats).map(nombre => ({ nombre })).sort((a, b) => a.nombre.localeCompare(b.nombre));
   });
 
+  autores = computed(() => {
+    const auts = new Set<string>();
+    this.productos().forEach(p => {
+      if (p.autores) {
+        // Los autores vienen como string separado por comas: "Autor 1,Autor 2"
+        p.autores.split(',').forEach((c: string) => auts.add(c.trim()));
+      }
+    });
+    return Array.from(auts).map(nombre => ({ nombre })).sort((a, b) => a.nombre.localeCompare(b.nombre));
+  });
 
   // ── PASO 5: FORMULARIOS REACTIVOS ────────────────────────
   // Dos formularios separados: uno para crear y otro para editar.
@@ -91,6 +101,7 @@ export class Productos implements OnInit {
 
   formularioCreacion = new FormGroup({
     titulo:            new FormControl('',   [Validators.required]),
+    autores:           new FormControl('',   [Validators.required]),
     descripcion:       new FormControl(''),
     isbn:              new FormControl(''),
     precio:            new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
@@ -105,6 +116,7 @@ export class Productos implements OnInit {
   formularioEdicion = new FormGroup({
     id:                new FormControl<number | null>(null), // ID del producto a editar
     titulo:            new FormControl('',   [Validators.required]),
+    autores:           new FormControl('',   [Validators.required]),
     descripcion:       new FormControl(''),
     isbn:              new FormControl(''),
     precio:            new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),

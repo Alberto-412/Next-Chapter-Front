@@ -151,3 +151,112 @@
     font-size: 2rem;
   }
 }
+
+/**
+ * ════════════════════════════════════════════════
+ * BLOQUE NUEVO: formulario para puntuar y reseñar.
+ * Misma estética que .resenas-libro (tarjeta blanca,
+ * mismo radio de borde, misma sombra suave).
+ * ════════════════════════════════════════════════
+ */
+
+.libro-detalle__resena-form {
+  margin-top: 2rem;
+  padding: 2.5rem;
+  border-radius: 1.75rem;
+
+  background-color: var(--color-blanco);
+  box-shadow: 0 18px 45px rgb(31 42 68 / 10%);
+}
+
+.libro-detalle__resena-form-titulo {
+  margin: 0 0 1.5rem;
+  color: var(--color-azul);
+  font-size: 1.35rem;
+  font-weight: 800;
+}
+
+.libro-detalle__resena-form-aviso {
+  margin: 0;
+  color: var(--color-gris-medio);
+  font-weight: 600;
+}
+
+.libro-detalle__resena-form-aviso a {
+  color: var(--color-morado);
+  font-weight: 800;
+}
+
+.libro-detalle__resena-form-mensaje {
+  margin: 0 0 1.25rem;
+  padding: 0.85rem 1.1rem;
+  border-radius: 0.8rem;
+  font-weight: 600;
+}
+
+.libro-detalle__resena-form-mensaje--ok {
+  background-color: var(--color-turquesa);
+  color: var(--color-blanco);
+}
+
+.libro-detalle__resena-form-mensaje--error {
+  background-color: var(--color-rosa);
+  color: var(--color-blanco);
+}
+
+/* Puntuación: select simple */
+.libro-detalle__select-grupo {
+  margin-bottom: 1.25rem;
+}
+
+.libro-detalle__select-label {
+  display: block;
+  margin-bottom: 0.4rem;
+  color: var(--color-gris-medio);
+  font-weight: 600;
+}
+
+.libro-detalle__select-calificacion {
+  width: 100%;
+  max-width: 260px;
+  padding: 0.6rem 0.85rem;
+
+  border: 1px solid var(--color-gris-claro);
+  border-radius: 0.8rem;
+
+  color: var(--color-azul);
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+.libro-detalle__select-calificacion:focus {
+  outline: none;
+  border-color: var(--color-morado);
+}
+
+.libro-detalle__resena-form-textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 0.85rem 1rem;
+  margin-bottom: 1.25rem;
+
+  border: 1px solid var(--color-gris-claro);
+  border-radius: 0.8rem;
+
+  color: var(--color-azul);
+  font-family: inherit;
+  font-size: 0.95rem;
+
+  resize: vertical;
+}
+
+.libro-detalle__resena-form-textarea:focus {
+  outline: none;
+  border-color: var(--color-morado);
+}
+
+@media (max-width: 480px) {
+  .libro-detalle__resena-form {
+    padding: 1.5rem;
+  }
+}
