@@ -92,3 +92,18 @@ body:has(.admin-layout) .navbar {
     display: none !important;
   }
 }
+/**
+ * Evita que aparezca scroll horizontal en la página.
+ *
+ * A veces algún componente (footer, carrusel, imagen,
+ * formulario, etc.) puede sobresalir unos pocos píxeles
+ * del ancho de la pantalla.
+ *
+ * Con overflow-x: hidden ocultamos cualquier desbordamiento
+ * horizontal para que el usuario no pueda desplazarse
+ * hacia los lados accidentalmente.
+ */
+html,
+body {
+  overflow-x: hidden;
+}

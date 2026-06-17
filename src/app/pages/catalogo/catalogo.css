@@ -17,15 +17,6 @@
 
   background-color: var(--color-crema);
   color: var(--color-azul);
-
-  /*BOOOOTSTRAP
-    Ya no usamos grid aquí porque Bootstrap
-    se encarga de la estructura responsive
-    con .container-fluid, .row y .col-*.
-  */
-  /* display: grid; */
-  /* grid-template-columns: 260px 1fr; */
-  /* gap: 2rem; */
 }
 
 .catalogo__sidebar {
@@ -76,21 +67,26 @@
   font-weight: 700;
 }
 
-/*BOOOOTSTRAP
-  Ya no necesitamos .catalogo__grid porque el grid
-  de libros lo hace Bootstrap con .row y .col-*.
-*/
-/*
-.catalogo__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 2rem;
-}
-*/
+/* Cards del catálogo */
 
 .catalogo__contenido .row > div {
   display: flex;
+  justify-content: center;
 }
+
+/*
+ *
+ * Limitamos el ancho máximo para que todas las
+ * las tarjetas tengan exactamente el mismo tamaño.
+ */
+
+.catalogo__contenido app-libro-card {
+  display: block;
+  width: 100%;
+  max-width: 260px;
+}
+
+/* Estados */
 
 .estado {
   padding: 1rem;
@@ -105,13 +101,8 @@
   color: var(--color-rosa);
 }
 
-/*BOOOOTSTRAAAAAAAAAAAAAAAAAAAAAAAAAAAP
+/* En tablet y móvil quitamos la línea lateral */
 
-
-/**
- * En móvil quitamos la línea lateral
- * y añadimos una línea inferior.
- */
 @media (max-width: 991px) {
   .catalogo__sidebar {
     border-right: none;
@@ -123,9 +114,19 @@
   }
 }
 
-/**
- * PAGINACIÓN
- */
+/* Ajustes para móvil */
+
+@media (max-width: 575px) {
+  .catalogo {
+    padding: 1rem;
+  }
+
+  .catalogo__header {
+    flex-direction: column;
+  }
+}
+
+/* PAGINACIÓN */
 
 .catalogo__paginacion {
   display: flex;
@@ -153,28 +154,22 @@
   transition: 0.2s ease;
 }
 
-/**
- * Efecto hover.
- */
+/* Hover */
+
 .catalogo__pagina:hover,
 .catalogo__pagina-nav:hover {
   color: var(--color-morado);
 }
 
-/**
- * Página activa.
- *
- * Solo cambia el color.
- * Nada de círculos ni botones.
- */
+/* Página activa */
+
 .catalogo__pagina--activa {
   color: var(--color-morado);
   font-weight: 800;
 }
 
-/**
- * Flechas desactivadas.
- */
+/* Flechas desactivadas */
+
 .catalogo__pagina-nav:disabled {
   opacity: 0.3;
   cursor: not-allowed;
