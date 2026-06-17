@@ -18,6 +18,21 @@ body {
   min-height: 100vh;
 }
 
+/**
+ * Evita que aparezca scroll horizontal en la página.
+ *
+ * el footer puede sobresalir unos pocos píxeles
+ * del ancho de la pantalla.
+ *
+ * Con overflow-x: hidden ocultamos cualquier desbordamiento
+ * horizontal para que el usuario no pueda desplazarse
+ * hacia los lados accidentalmente.
+ */
+html,
+body {
+  overflow-x: hidden;
+}
+
 /* Oculta la barra de navegación (navbar) en las páginas del panel de administración */
 body:has(.admin-layout) .navbar {
   display: none;
