@@ -3,9 +3,13 @@
     <img src="/image/nextchapter_logo_vertical_next_chapter_white.png" alt="Next Chapter" class="logo-img" />
   </a>
   <div class="buscador">
-    <span class="material-symbols-outlined">search</span>
-    <input type="text" placeholder="Buscar libros, manga, cómics y más..." />
-  </div>
+  <span class="material-symbols-outlined" (click)="buscar(inputBusqueda.value)">search</span>
+  <input
+    #inputBusqueda
+    type="text"
+    placeholder="Buscar libros, manga, cómics y más..."
+    (keyup.enter)="buscar(inputBusqueda.value)" />
+</div>
 
   <nav class="enlaces">
     <a routerLink="/catalogo">Catálogo</a>
@@ -13,7 +17,7 @@
   </nav>
 
   <div class="iconos">
-    <a routerLink="/favoritos" class="icono icono-favoritos">
+    <a routerLink="/wishlist" class="icono icono-favoritos">
       <span class="material-symbols-outlined">favorite</span>
       <span class="icono-texto">Favoritos</span>
     </a>

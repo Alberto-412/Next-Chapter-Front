@@ -1,5 +1,15 @@
 <article class="libro-card">
 
+<!-- Corazón de favoritos, encima de la portada -->
+    <button
+        type="button"
+        class="libro-card__favorito"
+        [class.libro-card__favorito--activo]="esFavorito()"
+        (click)="toggleFavorito($event)"
+        [attr.aria-label]="esFavorito() ? 'Quitar de favoritos' : 'Añadir a favoritos'">
+        {{ esFavorito() ? '♥' : '♡' }}
+    </button>
+
     <!-- Al pulsar la portada entramos al detalle del libro -->
     <a [routerLink]="['/libros', libro().id]" class="libro-card__imagen-link">
         <img class="libro-card__imagen" [src]="libro().imagen" [alt]="'Portada de ' + libro().titulo" />

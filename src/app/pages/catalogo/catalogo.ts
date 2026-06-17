@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-
+import { ActivatedRoute } from '@angular/router';
 import { LibrosService } from '../../core/services/libros';
 import { Libro } from '../../core/models/libro';
 import { FiltroLibros } from '../../core/models/filtro_libros';
@@ -19,6 +19,7 @@ export class Catalogo {
    * Conecta Angular con el back de libros.
    */
   private readonly librosService = inject(LibrosService);
+  private route = inject(ActivatedRoute);
 
   /**
    * Aquí guardamos los libros que se muestran en pantalla.
@@ -84,8 +85,16 @@ export class Catalogo {
    * sin aplicar filtros.
    */
   async ngOnInit() {
-    await this.cargarLibros();
-  }
+  // escuchamos el ?busqueda= que manda el buscador del navbar
+  this.route.queryParamMap.subscribe((params) => {
+    const busqueda = params.get('busqueda') ?? '';
+    this.paginaActual.set(1);
+    const filtros = busqueda ? { busqueda } : {};
+    this.filtrosActuales.set(filtros);
+    this.cargarLibros(filtros);
+  });
+}
+
 
   /**
    * cargarLibros(filtros?)

@@ -23,6 +23,12 @@ export class Navbar {
   drawerAbierto = signal(false);
   menuCuentaAbierto = signal(false);
 
+  buscar(termino: string) {
+  const t = termino.trim();
+  this.router.navigate(['/catalogo'], {
+    queryParams: t ? { busqueda: t } : {},
+  });
+}
   logueado(): boolean {
     return !!localStorage.getItem('token');
   }
