@@ -25,4 +25,8 @@ export class OrderDetail implements OnInit {
       error: () => this.cargando.set(false),
     });
   }
+imprimirFactura() {
+  window.print();
+}
+
 }
